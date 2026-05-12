@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.git
+.gitignore
+*.md
+.env
+.env.*
+!.env.example
+**/.DS_Store
+fail2ban
+**/fail2ban
