@@ -4,12 +4,12 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    # expose: porta só na rede Docker (Coolify/Traefik enxergam assim).
-    # ports: publica no host — é isso que o Docker Desktop mostra na coluna "Port(s)".
+    # Porta de host incomum para reduzir conflito com outros serviços (ex.: 8080).
+    # Coolify costuma usar a rede interna (expose: 80); o mapeamento 8077 ajuda em testes locais.
     expose:
       - "80"
     ports:
-      - "8080:80"
+      - "8077:80"
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/healthz"]
       interval: 30s
