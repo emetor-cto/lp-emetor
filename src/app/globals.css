@@ -8,18 +8,22 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-neutral-950: #0A0A0A;
 
-  /* Custom Shadow for Premium Glow */
-  --shadow-premium: 0 20px 40px -15px rgba(29, 78, 216, 0.15);
+  /* Custom Shadow for Premium Glow - Atualizado para o azul escuro */
+  --shadow-premium: 0 20px 40px -15px rgba(24, 35, 80, 0.25);
   --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02), 0 12px 24px rgba(0, 0, 0, 0.03);
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #1D4ED8;
-  --primary-hover: #1e40af;
+  --background: #fefaef;
+  --foreground: #182350;
+  --primary: #182350;
+  --primary-hover: #0d1430;
+  --accent: #b9915e;
+  --accent-hover: #9c784c;
   
   /* Antialiasing and Rendering Optimization */
   -webkit-font-smoothing: antialiased;

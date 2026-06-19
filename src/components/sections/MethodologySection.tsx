@@ -48,7 +48,7 @@ function MethodologyStep({
   const dotColor = useTransform(
     scrollYProgress,
     [start, end],
-    ["#e5e7eb", "#0000FF"]
+    ["#e5e7eb", "#b9915e"]
   )
 
   return (
@@ -66,7 +66,7 @@ function MethodologyStep({
       <div className="relative">
         <motion.span
           style={{ opacity: isActive }}
-          className="text-blue-600 font-mono text-[10px] md:text-xs font-bold mb-3 md:mb-4 block uppercase tracking-[0.2em]"
+          className="text-accent font-mono text-[10px] md:text-xs font-bold mb-3 md:mb-4 block uppercase tracking-[0.2em]"
         >
           Fase {step.number}
         </motion.span>
@@ -100,9 +100,9 @@ export function MethodologySection() {
     >
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="lg:hidden mb-16">
-          <span className="text-blue-600 font-bold uppercase tracking-[0.4em] text-[10px] mb-6 block">Metodologia Emetor</span>
+          <span className="text-accent font-bold uppercase tracking-[0.4em] text-[10px] mb-6 block">Metodologia Emetor</span>
           <h2 className="text-3xl font-bold tracking-tight text-neutral-900 leading-[1.1] mb-6">
-            Como transformamos sua <span className="text-blue-600 italic">operação em vantagem competitiva.</span>
+            Como transformamos sua <span className="text-accent italic">operação em vantagem competitiva.</span>
           </h2>
           <p className="text-lg text-neutral-500 font-medium leading-relaxed">
             Um processo linear e disciplinado focado em eliminar desperdícios e escalar performance através da tecnologia.
@@ -117,9 +117,9 @@ export function MethodologySection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <span className="text-blue-600 font-bold uppercase tracking-[0.4em] text-[10px] mb-8 block">Metodologia Emetor</span>
+                <span className="text-accent font-bold uppercase tracking-[0.4em] text-[10px] mb-8 block">Metodologia Emetor</span>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 leading-[1.05] mb-8">
-                  Como transformamos sua <span className="text-blue-600 italic">operação em vantagem competitiva.</span>
+                  Como transformamos sua <span className="text-accent italic">operação em vantagem competitiva.</span>
                 </h2>
                 <p className="text-xl text-neutral-500 font-medium leading-relaxed max-w-md">
                   Um processo linear e disciplinado focado em eliminar desperdícios e escalar performance através da tecnologia.
@@ -137,10 +137,10 @@ export function MethodologySection() {
                 <div className="w-full h-full bg-neutral-100" />
                 <motion.div
                   style={{ scaleY, originY: 0 }}
-                  className="absolute inset-0 w-[2px] bg-blue-600 z-10"
+                  className="absolute inset-0 w-[2px] bg-accent z-10"
                 >
                   <motion.div
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-5 bg-blue-500 blur-lg rounded-full"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-5 bg-accent blur-lg rounded-full"
                     animate={{ opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />

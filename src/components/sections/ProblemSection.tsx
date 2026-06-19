@@ -80,8 +80,8 @@ export function ProblemSection() {
               viewport={{ once: true, margin: "0px 0px -200px 0px" }}
               className="flex items-center gap-2 mb-6"
             >
-              <div className="h-[1px] w-8 bg-primary/30" />
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-xs">O Custo da Ineficiência</span>
+              <div className="h-[1px] w-8 bg-accent/30" />
+              <span className="text-accent font-bold uppercase tracking-[0.2em] text-xs">O Custo da Ineficiência</span>
             </motion.div>
             
             <motion.h2 
@@ -92,7 +92,7 @@ export function ProblemSection() {
               className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.1] mb-6"
             >
               Crescer sem estrutura <br />
-              <span className="text-[#0000FF] font-medium">custa caro.</span>
+              <span className="text-accent font-medium">custa caro.</span>
             </motion.h2>
             
             <motion.p 

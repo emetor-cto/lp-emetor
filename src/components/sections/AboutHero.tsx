@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { AltArrowRight } from "@solar-icons/react"
 import { motion } from "framer-motion"
 
@@ -38,11 +39,9 @@ export function AboutHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-lg md:text-xl text-neutral-500 mb-12 max-w-2xl leading-relaxed"
+            className="text-lg md:text-xl text-neutral-500 mb-12 max-w-2xl leading-relaxed font-medium"
           >
-            Estruturamos operações, organizamos processos, conectamos dados e aplicamos
-            inteligência artificial para empresas que precisam de eficiência máxima e
-            crescimento sustentável.
+            A Emetor não vende software. Nós reestruturamos as bases da sua empresa com tecnologia de elite, para que você possa escalar sem o caos.
           </motion.p>
 
           <motion.div
@@ -51,16 +50,16 @@ export function AboutHero() {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-6 items-start"
           >
-            <button
-              onClick={() => router.push("/diagnostico")}
-              className="group relative flex items-center bg-neutral-900 hover:bg-primary text-white font-bold py-2.5 px-3 rounded-full transition-all duration-500 ease-in-out min-w-[260px] h-[72px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.2)]">
-              <span className="flex-1 text-center text-lg transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
-                Falar com a Emetor
-              </span>
-              <div className="absolute left-3 group-hover:left-[calc(100%-60px)] bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-500 ease-in-out">
-                <AltArrowRight size={26} className="text-neutral-900 group-hover:text-primary transition-colors duration-500" />
-              </div>
-            </button>
+            <Link href="/diagnostico">
+              <button className="group relative flex items-center bg-accent hover:bg-accent-hover text-white font-bold py-2.5 px-3 rounded-full transition-all duration-500 ease-in-out min-w-[260px] h-[72px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.2)]">
+                <span className="flex-1 text-center text-lg transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
+                  Falar com a Emetor
+                </span>
+                <div className="absolute left-3 group-hover:left-[calc(100%-60px)] bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-500 ease-in-out">
+                  <AltArrowRight size={26} className="text-accent group-hover:text-accent-hover transition-colors duration-500" />
+                </div>
+              </button>
+            </Link>
           </motion.div>
         </div>
       </div>

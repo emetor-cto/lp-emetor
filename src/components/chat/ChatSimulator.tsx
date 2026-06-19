@@ -145,7 +145,7 @@ export function ChatSimulator() {
                 msg.sender === "bot" ? "bg-neutral-50/80 p-6 rounded-2xl border border-black/5" : "py-2 px-1"
               )}>
                 {msg.sender === "bot" && (
-                  <div className="w-12 h-12 rounded-sm bg-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
+                  <div className="w-12 h-12 rounded-sm bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
                     <Image
                       src={logoIcon}
                       alt="Emetor"
@@ -170,7 +170,7 @@ export function ChatSimulator() {
         {isTyping && (
           <div className="w-full flex justify-start">
             <div className="bg-neutral-50/80 p-6 rounded-2xl border border-black/5 flex gap-4">
-              <div className="w-12 h-12 rounded-sm bg-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
+              <div className="w-12 h-12 rounded-sm bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
                 <Image
                   src={logoIcon}
                   alt="Emetor"
@@ -194,7 +194,7 @@ export function ChatSimulator() {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center justify-center gap-4 py-8"
           >
-            <div className="flex items-center gap-2 text-blue-600 font-medium">
+            <div className="flex items-center gap-2 text-primary font-medium">
               <CheckRead size={20} />
               Diagnóstico enviado com sucesso!
             </div>
@@ -225,7 +225,7 @@ export function ChatSimulator() {
             )}
             <form
               onSubmit={handleSend}
-              className="relative bg-white rounded-2xl border border-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.05)] p-1.5 transition-all focus-within:border-blue-600/30"
+              className="relative bg-white rounded-2xl border border-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.05)] p-1.5 transition-all focus-within:border-primary/30"
             >
               <div className="flex items-center gap-2 pl-3">
                 <input
@@ -241,7 +241,7 @@ export function ChatSimulator() {
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all hover:bg-blue-700"
+                  className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all hover:bg-primary-hover"
                 >
                   <SendSquare className="w-5 h-5" />
                 </button>

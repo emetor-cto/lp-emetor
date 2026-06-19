@@ -2,6 +2,8 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { AltArrowRight } from "@solar-icons/react"
+import Image from "next/image"
+import logoBranca from "@/assets/logo-branca.png"
 
 export function FinalCTASection() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -14,7 +16,7 @@ export function FinalCTASection() {
     <section
       id="final-cta"
       ref={containerRef}
-      className="w-full bg-[#020202] py-48 md:py-64 relative overflow-hidden"
+      className="w-full bg-[#020202] pt-20 md:pt-32 pb-48 md:pb-64 relative overflow-hidden"
       data-header-theme="dark"
     >
       <div className="absolute inset-0 pointer-events-none">
@@ -24,13 +26,13 @@ export function FinalCTASection() {
             scale: [1, 1.05, 1]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-600/10 blur-[180px] rounded-full"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-accent/10 blur-[180px] rounded-full"
         />
 
         <motion.div
           animate={{ y: ["-100%", "200%"] }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-x-0 h-[500px] bg-gradient-to-b from-transparent via-blue-500/5 to-transparent opacity-30"
+          className="absolute inset-x-0 h-[500px] bg-gradient-to-b from-transparent via-accent/5 to-transparent opacity-30"
         />
 
         <div className="absolute inset-0 opacity-20 [mask-image:radial-gradient(circle_at_center,white,transparent)]">
@@ -40,6 +42,22 @@ export function FinalCTASection() {
 
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <div className="flex flex-col items-center text-center">
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-4 opacity-80"
+          >
+            <div className="relative w-64 md:w-[400px] lg:w-[600px] h-12 md:h-[66px] lg:h-[100px]">
+              <Image 
+                src={logoBranca} 
+                alt="Emetor" 
+                fill 
+                className="object-contain" 
+              />
+            </div>
+          </motion.div>
 
           <motion.h2
             initial={{ opacity: 0, y: 30 }}

@@ -7,25 +7,25 @@ const pillars = [
     title: "Estrutura",
     description: "Organização cirúrgica de processos e fluxos operacionais para eliminar o caos.",
     icon: Settings,
-    color: "bg-blue-50 text-blue-600",
+    color: "bg-accent/10 text-accent",
   },
   {
     title: "Dados",
     description: "Conexão e inteligência de dados para decisões baseadas em fatos, não em intuição.",
     icon: Database,
-    color: "bg-indigo-50 text-indigo-600",
+    color: "bg-accent/10 text-accent",
   },
   {
     title: "Tecnologia",
     description: "Desenvolvimento de software e IA aplicados diretamente à performance do negócio.",
     icon: Code,
-    color: "bg-primary/5 text-primary",
+    color: "bg-accent/10 text-accent",
   },
   {
     title: "Performance",
     description: "Foco total em resultados mensuráveis, escalabilidade e eficiência operacional.",
     icon: TrendingUp,
-    color: "bg-blue-50 text-blue-600",
+    color: "bg-accent/10 text-accent",
   }
 ]
 
