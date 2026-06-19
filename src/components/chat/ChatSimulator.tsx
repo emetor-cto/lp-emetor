@@ -4,6 +4,7 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { SendSquare, CheckRead, Restart } from "@solar-icons/react"
 import { cn } from "@/utils/utils"
+import { submitDiagnostico } from "@/lib/submit-diagnostico"
 
 import logoIcon from "@/assets/logo-icon-darkmode.png"
 
@@ -32,6 +33,7 @@ export function ChatSimulator() {
   const [isTyping, setIsTyping] = useState(false)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [isFinished, setIsFinished] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -75,6 +77,7 @@ export function ChatSimulator() {
       setMessages([{ id: "init", text: "Olá! Para iniciarmos o diagnóstico, qual o nome da sua empresa?", sender: "bot" }])
       setQuestionIndex(0)
       setIsFinished(false)
+      setSubmitError(null)
       setInput("")
     }
   }
@@ -89,26 +92,46 @@ export function ChatSimulator() {
     setInput("")
 
     if (questionIndex >= botQuestions.length) {
-      setIsFinished(true)
       setIsTyping(true)
+      setSubmitError(null)
 
-      console.log("Enviando diagnóstico para contato@emetor.com.br...", {
-        empresa: messages[0].sender === "user" ? messages[0].text : "N/A",
-        respostas: messages.filter(m => m.sender === "user").map(m => m.text),
-        contatoFinal: currentAnswer
-      })
+      const userAnswers = [...messages.filter(m => m.sender === "user"), userMsg]
+      const empresa = userAnswers[0]?.text ?? ""
+      const email = currentAnswer
+      const respostas = botQuestions.slice(0, -1).map((pergunta, index) => ({
+        pergunta,
+        resposta: userAnswers[index + 1]?.text ?? "",
+      }))
 
-      setTimeout(() => {
-        setIsTyping(false)
+      try {
+        await submitDiagnostico({
+          empresa,
+          email,
+          respostas,
+          metadata: {
+            origem: "lp_diagnostico",
+            data_resposta: new Date().toISOString(),
+          },
+        })
+
+        setIsFinished(true)
         setMessages(prev => [
           ...prev,
           {
             id: "final",
             text: "Obrigado pelas informações! Nossa equipe de especialistas já recebeu seu diagnóstico e entrará em contato em breve através do e-mail informado.",
-            sender: "bot"
-          }
+            sender: "bot",
+          },
         ])
-      }, 2000)
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "Não foi possível enviar o diagnóstico. Tente novamente.",
+        )
+      } finally {
+        setIsTyping(false)
+      }
       return
     }
 
@@ -186,6 +209,17 @@ export function ChatSimulator() {
               </div>
             </div>
           </div>
+        )}
+
+        {submitError && !isTyping && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center gap-2 py-4 text-center"
+          >
+            <p className="text-sm text-red-600">{submitError}</p>
+            <p className="text-xs text-neutral-500">Verifique o e-mail informado e tente enviar novamente.</p>
+          </motion.div>
         )}
 
         {isFinished && !isTyping && (
