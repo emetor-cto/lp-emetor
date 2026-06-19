@@ -73,8 +73,8 @@ export function SolutionSection() {
             viewport={{ once: true }}
             className="flex items-center gap-2 mb-6"
           >
-            <div className="h-[1px] w-8 bg-primary/30" />
-            <span className="text-primary font-bold uppercase tracking-[0.2em] text-xs">A Entrega da Emetor</span>
+            <div className="h-[1px] w-8 bg-accent/30" />
+            <span className="text-accent font-bold uppercase tracking-[0.2em] text-xs">A Entrega da Emetor</span>
           </motion.div>
 
           <motion.h2
@@ -85,7 +85,7 @@ export function SolutionSection() {
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 tracking-tight leading-[1.1] mb-6 max-w-4xl"
           >
             Estrutura técnica para <br />
-            <span className="text-[#0000FF] font-medium">resultados previsíveis.</span>
+            <span className="text-accent font-medium">resultados previsíveis.</span>
           </motion.h2>
 
           <motion.p

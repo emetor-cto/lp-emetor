@@ -37,7 +37,7 @@ export function DiagnosticoOverlay() {
             <div className="flex-1 overflow-y-auto px-6 md:px-12 pb-20 flex flex-col items-center">
               <main className="w-full max-w-4xl pt-4 flex flex-col items-center text-center">
                 <h1 className="text-2xl md:text-[32px] font-bold tracking-tight text-neutral-900 leading-[1.2] mb-6 max-w-2xl">
-                  Vamos estruturar sua <span className="text-[#0000FF]">próxima solução</span> tecnológica!
+                  Vamos estruturar sua <span className="text-primary">próxima solução</span> tecnológica!
                 </h1>
 
                 <div className="w-full pb-20">
