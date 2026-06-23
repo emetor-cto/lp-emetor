@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { AltArrowRight, MenuDots, CloseCircle } from "@solar-icons/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/utils/utils"
@@ -12,6 +12,7 @@ import logoBranca from "@/assets/logo-branca.png"
 
 export function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isDarkTheme, setIsDarkTheme] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -145,24 +146,25 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
-            <Link href="/diagnostico">
-              <button className={cn(
+            <button
+              onClick={() => router.push("/diagnostico")}
+              className={cn(
                 "group relative flex items-center font-bold py-1.5 px-2 rounded-full transition-all duration-500 ease-in-out min-w-[180px] h-12 overflow-hidden shadow-lg hover:bg-accent hover:text-white",
                 isDarkTheme 
                   ? "bg-white text-primary shadow-white/5" 
                   : "bg-primary text-white shadow-primary/5"
+              )}
+            >
+              <span className="flex-1 text-center text-[11px] uppercase tracking-wider transition-all duration-500 ease-in-out group-hover:translate-x-[-12px] translate-x-[12px]">
+                Fale Conosco
+              </span>
+              <div className={cn(
+                "absolute left-2 group-hover:left-[calc(100%-40px)] rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all duration-500 ease-in-out",
+                isDarkTheme ? "bg-neutral-100" : "bg-white"
               )}>
-                <span className="flex-1 text-center text-[11px] uppercase tracking-wider transition-all duration-500 ease-in-out group-hover:translate-x-[-12px] translate-x-[12px]">
-                  Fale Conosco
-                </span>
-                <div className={cn(
-                  "absolute left-2 group-hover:left-[calc(100%-40px)] rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all duration-500 ease-in-out",
-                  isDarkTheme ? "bg-neutral-100" : "bg-white"
-                )}>
-                  <AltArrowRight size={18} className="text-primary group-hover:text-accent transition-colors duration-500" />
-                </div>
-              </button>
-            </Link>
+                <AltArrowRight size={18} className="text-primary group-hover:text-accent transition-colors duration-500" />
+              </div>
+            </button>
           </div>
 
           {/* Mobile Menu Toggle */}

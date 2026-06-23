@@ -5,8 +5,11 @@ import { AltArrowRight } from "@solar-icons/react"
 import Image from "next/image"
 import logoBranca from "@/assets/logo-branca.png"
 
+import { useRouter } from "next/navigation"
+
 export function FinalCTASection() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -50,11 +53,11 @@ export function FinalCTASection() {
             className="mb-4 opacity-80"
           >
             <div className="relative w-64 md:w-[400px] lg:w-[600px] h-12 md:h-[66px] lg:h-[100px]">
-              <Image 
-                src={logoBranca} 
-                alt="Emetor" 
-                fill 
-                className="object-contain" 
+              <Image
+                src={logoBranca}
+                alt="Emetor"
+                fill
+                className="object-contain"
               />
             </div>
           </motion.div>
@@ -87,13 +90,14 @@ export function FinalCTASection() {
             className="w-full flex justify-center"
           >
             <button
-              className="group relative flex items-center bg-white text-neutral-900 font-bold rounded-full transition-all duration-500 ease-in-out min-w-[320px] md:min-w-[400px] h-[84px] overflow-hidden shadow-[0_30px_70px_rgba(255,255,255,0.1)] hover:shadow-[0_40px_90px_rgba(255,255,255,0.15)] active:scale-95"
+              onClick={() => router.push("/diagnostico")}
+              className="group relative flex items-center bg-white text-neutral-900 font-bold rounded-full transition-all duration-500 ease-in-out min-w-[320px] md:min-w-[400px] h-[84px] overflow-hidden shadow-[0_30px_70px_rgba(255,255,255,0.1)] hover:shadow-[0_40px_90px_rgba(255,255,255,0.15)] hover:bg-accent hover:text-white active:scale-95"
             >
               <span className="flex-1 text-center text-lg md:text-xl transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
                 Falar com a Emetor
               </span>
               <div className="absolute left-3 group-hover:left-[calc(100%-74px)] bg-neutral-100 rounded-full w-[60px] h-[60px] flex items-center justify-center shadow-lg transition-all duration-500 ease-in-out">
-                <AltArrowRight size={28} className="text-neutral-900 transition-colors duration-500" />
+                <AltArrowRight size={28} className="text-neutral-900 group-hover:text-accent transition-colors duration-500" />
               </div>
             </button>
           </motion.div>
