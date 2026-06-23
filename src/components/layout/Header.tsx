@@ -147,7 +147,7 @@ export function Header() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
             <button
-              onClick={() => router.push("/diagnostico")}
+              onClick={() => router.push("/diagnostico", { scroll: false })}
               className={cn(
                 "group relative flex items-center font-bold py-1.5 px-2 rounded-full transition-all duration-500 ease-in-out min-w-[180px] h-12 overflow-hidden shadow-lg hover:bg-accent hover:text-white",
                 isDarkTheme 
