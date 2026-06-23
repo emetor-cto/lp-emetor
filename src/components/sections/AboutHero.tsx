@@ -1,7 +1,6 @@
 "use client"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { AltArrowRight } from "@solar-icons/react"
 import { motion } from "framer-motion"
 
@@ -50,16 +49,17 @@ export function AboutHero() {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-6 items-start"
           >
-            <Link href="/diagnostico">
-              <button className="group relative flex items-center bg-accent hover:bg-accent-hover text-white font-bold py-2.5 px-3 rounded-full transition-all duration-500 ease-in-out min-w-[260px] h-[72px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.2)]">
-                <span className="flex-1 text-center text-lg transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
-                  Falar com a Emetor
-                </span>
-                <div className="absolute left-3 group-hover:left-[calc(100%-60px)] bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-500 ease-in-out">
-                  <AltArrowRight size={26} className="text-accent group-hover:text-accent-hover transition-colors duration-500" />
-                </div>
-              </button>
-            </Link>
+            <button
+              onClick={() => router.push("/diagnostico")}
+              className="group relative flex items-center bg-accent hover:bg-accent-hover text-white font-bold py-2.5 px-3 rounded-full transition-all duration-500 ease-in-out min-w-[260px] h-[72px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.2)]"
+            >
+              <span className="flex-1 text-center text-lg transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
+                Falar com a Emetor
+              </span>
+              <div className="absolute left-3 group-hover:left-[calc(100%-60px)] bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-500 ease-in-out">
+                <AltArrowRight size={26} className="text-accent group-hover:text-accent-hover transition-colors duration-500" />
+              </div>
+            </button>
           </motion.div>
         </div>
       </div>
