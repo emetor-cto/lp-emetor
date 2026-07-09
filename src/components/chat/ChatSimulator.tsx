@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { SendSquare, CheckRead, Restart } from "@solar-icons/react"
+import { Plain, CheckRead, Restart } from "@solar-icons/react"
 import { cn } from "@/utils/utils"
 import { submitDiagnostico } from "@/lib/submit-diagnostico"
 
@@ -172,11 +172,11 @@ export function ChatSimulator() {
               )}
             >
               <div className={cn(
-                "max-w-[85%] flex gap-4",
-                msg.sender === "bot" ? "bg-neutral-50/80 p-6 rounded-2xl border border-black/5" : "py-2 px-1"
+                "max-w-[85%] flex gap-4 items-start",
+                "py-2 px-1"
               )}>
                 {msg.sender === "bot" && (
-                  <div className="w-12 h-12 rounded-sm bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
+                  <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
                     <Image
                       src={logoIcon}
                       alt="Emetor"
@@ -189,7 +189,7 @@ export function ChatSimulator() {
 
                 <div className={cn(
                   "text-[16px] md:text-[18px] leading-[1.6] whitespace-pre-wrap",
-                  msg.sender === "bot" ? "text-neutral-800" : "text-neutral-700 text-right"
+                  msg.sender === "bot" ? "text-neutral-800 pt-2" : "text-neutral-700 text-right pt-2"
                 )}>
                   {msg.text}
                 </div>
@@ -200,8 +200,8 @@ export function ChatSimulator() {
 
         {isTyping && (
           <div className="w-full flex justify-start">
-            <div className="bg-neutral-50/80 p-6 rounded-2xl border border-black/5 flex gap-4">
-              <div className="w-12 h-12 rounded-sm bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1">
+            <div className="py-2 px-1 flex gap-4 items-center">
+              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
                 <Image
                   src={logoIcon}
                   alt="Emetor"
@@ -210,7 +210,7 @@ export function ChatSimulator() {
                   className="object-contain"
                 />
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 pt-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
                 <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse [animation-delay:0.2s]" />
                 <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse [animation-delay:0.4s]" />
@@ -283,9 +283,9 @@ export function ChatSimulator() {
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all hover:bg-primary-hover"
+                  className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all hover:bg-primary-hover shadow-sm"
                 >
-                  <SendSquare className="w-5 h-5" />
+                  <Plain className="w-5 h-5 -mr-0.5" />
                 </button>
               </div>
             </form>
