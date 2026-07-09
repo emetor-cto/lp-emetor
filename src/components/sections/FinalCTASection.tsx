@@ -6,6 +6,7 @@ import Image from "next/image"
 import logoBranca from "@/assets/logo-branca.png"
 
 import { useRouter } from "next/navigation"
+import { openDiagnostico } from "@/lib/open-diagnostico"
 
 export function FinalCTASection() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -90,7 +91,7 @@ export function FinalCTASection() {
             className="w-full flex justify-center"
           >
             <button
-              onClick={() => router.push("/diagnostico", { scroll: false })}
+              onClick={() => openDiagnostico()}
               className="group relative flex items-center bg-white text-neutral-900 font-bold rounded-full transition-all duration-500 ease-in-out min-w-[320px] md:min-w-[400px] h-[84px] overflow-hidden shadow-[0_30px_70px_rgba(255,255,255,0.1)] hover:shadow-[0_40px_90px_rgba(255,255,255,0.15)] hover:bg-accent hover:text-white active:scale-95"
             >
               <span className="flex-1 text-center text-lg md:text-xl transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">

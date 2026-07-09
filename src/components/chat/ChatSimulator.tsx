@@ -64,11 +64,19 @@ export function ChatSimulator() {
   }, [messages, questionIndex, isFinished, isLoaded])
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    const container = document.getElementById("diagnostico-scroll-container")
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" })
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+    }
   }
 
   useEffect(() => {
-    scrollToBottom()
+    const timer = setTimeout(() => {
+      scrollToBottom()
+    }, 50)
+    return () => clearTimeout(timer)
   }, [messages, isTyping])
 
   const handleReset = () => {
