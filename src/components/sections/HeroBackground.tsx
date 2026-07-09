@@ -170,33 +170,40 @@ export function HeroBackground() {
 
       window.addEventListener('resize', handleResize)
 
+      let isVisible = true
+      const observer = new IntersectionObserver(
+        ([entry]) => { isVisible = entry.isIntersecting },
+        { threshold: 0 }
+      )
+      if (containerRef.current) observer.observe(containerRef.current)
+
       let clock = new THREE.Clock()
       const animate = () => {
+        animationFrameRef.current = requestAnimationFrame(animate)
+
+        if (!isVisible) return
+
         const delta = clock.getDelta()
 
         layer1.uniforms.u_time.value += delta
         layer2.uniforms.u_time.value += delta
 
-        // EXTREME SCROLL CAPTURE
         const winScroll = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || (document.scrollingElement?.scrollTop || 0)
         const winHeight = window.innerHeight || 1
 
         targetScrollRef.current = winScroll / winHeight
-
-        // Smooth Lerp
         scrollRef.current += (targetScrollRef.current - scrollRef.current) * 0.1
 
         layer1.uniforms.u_scroll.value = scrollRef.current * 0.5
         layer2.uniforms.u_scroll.value = scrollRef.current * 1.5
 
         renderer.render(scene, camera)
-        animationFrameRef.current = requestAnimationFrame(animate)
       }
 
       animate()
 
-      // Cleanup
       return () => {
+        observer.disconnect()
         window.removeEventListener('resize', handleResize)
         if (animationFrameRef.current !== 0) cancelAnimationFrame(animationFrameRef.current)
         geometry.dispose()

@@ -9,6 +9,7 @@ import { cn } from "@/utils/utils"
 
 import logoPreta from "@/assets/logo-preta.png"
 import logoBranca from "@/assets/logo-branca.png"
+import { openDiagnostico } from "@/lib/open-diagnostico"
 
 export function Header() {
   const pathname = usePathname()
@@ -18,38 +19,49 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
+    const checkHeaderTheme = () => {
+      const headerBottom = 82 // altura do header para verificação de intersecção
+      const darkSections = document.querySelectorAll('[data-header-theme="dark"]')
+      let isDark = false
+      darkSections.forEach((section) => {
+        const rect = section.getBoundingClientRect()
+        if (rect.top <= headerBottom && rect.bottom >= 20) {
+          isDark = true
+        }
+      })
+      setIsDarkTheme(isDark)
+    }
+
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = (window.scrollY / totalHeight) * 100
+      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0
       setScrollProgress(progress)
+      checkHeaderTheme()
     }
 
-    const intersectingSections = new Set<string>()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", checkHeaderTheme)
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = (entry.target as HTMLElement).id || entry.target.className
-          if (entry.isIntersecting) {
-            intersectingSections.add(id)
-          } else {
-            intersectingSections.delete(id)
-          }
-          setIsDarkTheme(intersectingSections.size > 0)
-        })
-      },
-      { threshold: [0], rootMargin: "-80px 0px 0px 0px" }
-    )
+    // Checar imediatamente e após transições do DOM/Framer Motion
+    checkHeaderTheme()
+    const t1 = setTimeout(checkHeaderTheme, 50)
+    const t2 = setTimeout(checkHeaderTheme, 300)
+    const t3 = setTimeout(checkHeaderTheme, 800)
 
-    const darkSections = document.querySelectorAll('[data-header-theme="dark"]')
-    darkSections.forEach((section) => observer.observe(section))
+    const observer = new MutationObserver(() => {
+      checkHeaderTheme()
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
 
-    window.addEventListener("scroll", handleScroll)
     return () => {
       window.removeEventListener("scroll", handleScroll)
-      darkSections.forEach((section) => observer.unobserve(section))
+      window.removeEventListener("resize", checkHeaderTheme)
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+      observer.disconnect()
     }
-  }, [])
+  }, [pathname])
 
   // Lock scroll when menu is open
   useEffect(() => {
@@ -91,16 +103,16 @@ export function Header() {
     <>
       <header className={cn(
         "sticky top-0 z-50 w-full transition-all duration-500 border-b",
-        isDarkTheme 
-          ? "bg-black/20 backdrop-blur-2xl border-white/10" 
+        isDarkTheme
+          ? "bg-black/20 backdrop-blur-2xl border-white/10"
           : "bg-white/30 backdrop-blur-xl border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]"
       )}>
         {/* Scroll Progress Bar */}
         <div
           className={cn(
             "absolute bottom-[-1px] left-0 h-[2px] bg-accent transition-all duration-150 ease-out z-10",
-            isDarkTheme 
-              ? "shadow-[0_0_15px_rgba(185,145,94,0.6)]" 
+            isDarkTheme
+              ? "shadow-[0_0_15px_rgba(185,145,94,0.6)]"
               : "shadow-[0_0_10px_rgba(185,145,94,0.3)]"
           )}
           style={{ width: `${scrollProgress}%` }}
@@ -129,6 +141,12 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={(e) => {
+                  if (link.href === "/diagnostico") {
+                    e.preventDefault()
+                    openDiagnostico()
+                  }
+                }}
                 className={cn(
                   "relative transition-colors hover:text-accent group",
                   pathname === link.href ? 'text-accent' : '',
@@ -147,11 +165,11 @@ export function Header() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
             <button
-              onClick={() => router.push("/diagnostico", { scroll: false })}
+              onClick={() => openDiagnostico()}
               className={cn(
                 "group relative flex items-center font-bold py-1.5 px-2 rounded-full transition-all duration-500 ease-in-out min-w-[180px] h-12 overflow-hidden shadow-lg hover:bg-accent hover:text-white",
-                isDarkTheme 
-                  ? "bg-white text-primary shadow-white/5" 
+                isDarkTheme
+                  ? "bg-white text-primary shadow-white/5"
                   : "bg-primary text-white shadow-primary/5"
               )}
             >
@@ -168,19 +186,19 @@ export function Header() {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="md:hidden relative z-[60] p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
               <CloseCircle size={28} className="text-white" />
             ) : (
-              <MenuDots 
-                size={28} 
+              <MenuDots
+                size={28}
                 className={cn(
                   "transition-colors",
                   isDarkTheme ? "text-white" : "text-neutral-900"
-                )} 
+                )}
               />
             )}
           </button>
@@ -211,9 +229,15 @@ export function Header() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(e) => {
+                      setIsMenuOpen(false)
+                      if (link.href === "/diagnostico") {
+                        e.preventDefault()
+                        openDiagnostico()
+                      }
+                    }}
                     className={cn(
                       "text-4xl font-bold tracking-tighter transition-all hover:translate-x-4 inline-block",
                       pathname === link.href ? "text-accent" : "text-white/40"
@@ -225,20 +249,24 @@ export function Header() {
               ))}
             </nav>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="mt-20 relative z-10"
             >
-              <Link href="/diagnostico" onClick={() => setIsMenuOpen(false)}>
-                <button className="flex items-center gap-4 text-white group">
-                  <span className="text-lg font-bold tracking-widest uppercase">Iniciar Diagnóstico</span>
-                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
-                    <AltArrowRight size={24} className="text-accent" />
-                  </div>
-                </button>
-              </Link>
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  openDiagnostico()
+                }}
+                className="flex items-center gap-4 text-white group"
+              >
+                <span className="text-lg font-bold tracking-widest uppercase">Iniciar Diagnóstico</span>
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
+                  <AltArrowRight size={24} className="text-accent" />
+                </div>
+              </button>
             </motion.div>
 
             <div className="absolute bottom-12 left-10 text-white/20 text-[10px] font-bold tracking-[0.5em] uppercase">

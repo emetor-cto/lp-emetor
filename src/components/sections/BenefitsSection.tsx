@@ -1,6 +1,6 @@
 "use client"
 import { motion, useTransform, useScroll } from "framer-motion"
-import { useRef } from "react"
+import { useRef, memo, useMemo } from "react"
 import { cn } from "@/utils/utils"
 import Image from "next/image"
 import logoIcon from "@/assets/logo-icon-darkmode.png"
@@ -66,7 +66,7 @@ const benefits = [
   }
 ]
 
-function BenefitCard({ benefit, i, total, scrollYProgress }: { benefit: any, i: number, total: number, scrollYProgress: any }) {
+const BenefitCard = memo(function BenefitCard({ benefit, i, total, scrollYProgress, vw }: { benefit: any, i: number, total: number, scrollYProgress: any, vw: number }) {
   const segment = 0.85 / total
   const start = i * segment
   const nextStart = (i + 1) * segment
@@ -76,7 +76,7 @@ function BenefitCard({ benefit, i, total, scrollYProgress }: { benefit: any, i: 
   const x = useTransform(
     scrollYProgress,
     [Math.max(0, start - 0.15), start, nextStart, Math.min(1, nextEnd)],
-    ["100vw", "0vw", "0vw", `${stackOffset}px`]
+    [vw, 0, 0, stackOffset]
   )
 
   const y = useTransform(scrollYProgress, [nextStart, Math.min(1, nextEnd)], [0, -18])
@@ -90,49 +90,51 @@ function BenefitCard({ benefit, i, total, scrollYProgress }: { benefit: any, i: 
         y,
         rotate,
         scale,
-        zIndex: i
+        zIndex: i,
+        willChange: "transform"
       }}
       className="absolute inset-0 w-full h-full flex items-center justify-center p-4 md:p-6"
     >
-      <div className="relative w-full max-w-2xl min-h-[310px] md:min-h-[270px] h-auto bg-white/15 md:bg-white/20 backdrop-blur-[40px] border border-white/60 rounded-[32px] overflow-hidden flex flex-col md:flex-row shadow-[0_30px_80px_rgba(0,0,0,0.1),_inset_0_1px_3px_rgba(255,255,255,0.9),_inset_0_-1px_2px_rgba(255,255,255,0.2)] transition-all duration-500 ring-1 ring-white/30">
-
+      <div
+        className="relative w-full max-w-2xl min-h-[310px] md:min-h-[270px] h-auto bg-white/15 md:bg-white/20 backdrop-blur-[40px] border border-white/60 rounded-[32px] overflow-hidden flex flex-col md:flex-row shadow-[0_30px_80px_rgba(0,0,0,0.1),_inset_0_1px_3px_rgba(255,255,255,0.9),_inset_0_-1px_2px_rgba(255,255,255,0.2)] ring-1 ring-white/30"
+      >
         <div className="w-full md:w-[32%] min-h-[130px] relative overflow-hidden flex items-center justify-center bg-white/30 border-b md:border-b-0 md:border-r border-white/50 shrink-0 p-6">
 
-          <div className={cn("absolute inset-0 blur-[60px] opacity-[0.05]", benefit.glow)} />
+          <div className={cn("absolute inset-0 blur-[80px] opacity-[0.12]", benefit.glow)} />
 
           <div className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center my-4 md:my-0">
 
-            <div className="absolute inset-0 border-[0.5px] border-slate-300/40 rounded-full" />
+            <div className="absolute inset-0 border-[0.5px] border-slate-200/60 rounded-full" />
 
-            <span className="text-4xl md:text-5xl font-light tracking-tight leading-none select-none relative z-10 text-slate-800">
+            <span className="text-4xl md:text-5xl font-light tracking-tight leading-none select-none relative z-10 text-slate-700">
               {benefit.label}
             </span>
           </div>
 
-          <benefit.icon className="absolute -bottom-6 -right-6 w-20 h-20 md:w-24 md:h-24 text-slate-900/[0.03] -rotate-12 pointer-events-none" />
+          <benefit.icon className="absolute -bottom-6 -right-6 w-20 h-20 md:w-24 md:h-24 text-slate-900/[0.04] -rotate-12 pointer-events-none" />
         </div>
 
-        <div className="flex-1 p-6 md:p-10 text-left relative z-20 bg-transparent flex flex-col justify-center overflow-hidden">
-          <div className="absolute -bottom-4 -right-4 w-48 h-48 md:w-64 md:h-64 opacity-15 pointer-events-none -rotate-12 z-0">
+        <div className="flex-1 p-6 md:p-10 text-left relative z-20 flex flex-col justify-center overflow-hidden">
+          <div className="absolute -bottom-4 -right-4 w-48 h-48 md:w-64 md:h-64 opacity-[0.07] pointer-events-none -rotate-12 z-0">
             <Image src={logoIcon} alt="Emetor Watermark" fill className="object-contain" />
           </div>
 
-          <span className="text-[#1e3a8a] font-black uppercase tracking-[0.25em] text-[10px] md:text-[11px] mb-2.5 block relative z-10 drop-shadow-[0_1px_2px_rgba(255,255,255,0.6)]">
+          <span className="text-[#1e3a8a] font-black uppercase tracking-[0.25em] text-[10px] md:text-[11px] mb-2.5 block relative z-10">
             {benefit.category}
           </span>
-          <h3 className="text-xl md:text-3xl font-extrabold text-slate-900 mb-3.5 tracking-tight leading-snug relative z-10 drop-shadow-[0_1px_5px_rgba(255,255,255,0.8)]">
+          <h3 className="text-xl md:text-3xl font-extrabold text-slate-900 mb-3.5 tracking-tight leading-snug relative z-10">
             {benefit.title}
           </h3>
-          <p className="text-[13.5px] md:text-[15px] text-slate-700 leading-relaxed font-medium relative z-10 mb-5 md:mb-7">
+          <p className="text-[13.5px] md:text-[15px] text-slate-600 leading-relaxed font-medium relative z-10 mb-5 md:mb-7">
             {benefit.description}
           </p>
 
           <div className="mt-auto">
             <div className="flex items-center mb-3">
-              <span className="text-[11.5px] font-bold text-slate-500 uppercase tracking-widest">{benefit.metric}</span>
+              <span className="text-[11.5px] font-bold text-slate-400 uppercase tracking-widest">{benefit.metric}</span>
             </div>
 
-            <div className="p-[1px] h-1 w-full bg-white/30 rounded-full overflow-hidden flex-shrink-0 relative z-10 border-[0.5px] border-white/60 shadow-sm">
+            <div className="p-[1px] h-1 w-full bg-slate-100 rounded-full overflow-hidden flex-shrink-0 relative z-10">
               <div className={cn("h-full rounded-full bg-gradient-to-r", benefit.color)} />
             </div>
           </div>
@@ -140,7 +142,7 @@ function BenefitCard({ benefit, i, total, scrollYProgress }: { benefit: any, i: 
       </div>
     </motion.div>
   )
-}
+})
 
 function PaginationIndicator({ i, total, scrollYProgress, benefit }: { i: number, total: number, scrollYProgress: any, benefit: any }) {
   const segment = 0.85 / total
@@ -163,6 +165,9 @@ export function BenefitsSection() {
     target: containerRef,
     offset: ["start start", "end end"]
   })
+
+  // Calcula vw em pixels UMA vez — elimina resolução de string "100vw" em cada frame de animação
+  const vw = useMemo(() => typeof window !== "undefined" ? window.innerWidth : 1440, [])
 
   return (
     <section
@@ -197,6 +202,7 @@ export function BenefitsSection() {
               i={i}
               total={benefits.length}
               scrollYProgress={scrollYProgress}
+              vw={vw}
             />
           ))}
         </div>
@@ -210,3 +216,4 @@ export function BenefitsSection() {
     </section>
   )
 }
+

@@ -2,6 +2,7 @@
 import { usePathname, useRouter } from "next/navigation"
 import { AltArrowRight, ArrowRight } from "@solar-icons/react"
 import { HeroBackground } from "./HeroBackground"
+import { openDiagnostico } from "@/lib/open-diagnostico"
 
 /**
  * HeroSection Component
@@ -27,7 +28,7 @@ export function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-8 items-center justify-center">
           <button
-            onClick={() => router.push("/diagnostico", { scroll: false })}
+            onClick={() => openDiagnostico()}
             className="group relative flex items-center bg-primary hover:bg-accent text-white font-bold py-2.5 px-3 rounded-full transition-all duration-500 ease-in-out min-w-[260px] h-[72px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.12)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.2)]">
             <span className="flex-1 text-center text-lg transition-all duration-500 ease-in-out group-hover:translate-x-[-24px] translate-x-[24px]">
               Falar com a Emetor

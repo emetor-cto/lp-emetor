@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { DiagnosticoOverlay } from "@/components/layout/DiagnosticoOverlay";
 
 export default function RootLayout({
@@ -32,8 +34,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="antialiased">
-        {children}
+      <body className="antialiased flex min-h-screen flex-col bg-white">
+        <Header />
+        <main className="flex-1 relative">
+          {children}
+        </main>
+        <Footer />
         <DiagnosticoOverlay />
       </body>
     </html>
