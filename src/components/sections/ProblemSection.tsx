@@ -115,7 +115,7 @@ export function ProblemSection() {
             {tags.map((tag) => (
               <Badge 
                 key={tag} 
-                className="bg-white text-neutral-500 border border-neutral-100 px-4 py-2 text-[10px] font-bold uppercase tracking-wider shadow-sm hover:border-primary/20 transition-colors"
+                className="bg-white text-neutral-500 border border-neutral-100 px-4 py-2 text-[10px] font-bold uppercase tracking-wider shadow-sm hover:bg-accent hover:text-white hover:border-accent transition-all duration-300"
               >
                 {tag}
               </Badge>
