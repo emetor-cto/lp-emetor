@@ -96,7 +96,8 @@ export function Header() {
   const navLinks = [
     { href: "/", label: "Início" },
     { href: "/quem-somos", label: "Quem Somos" },
-    { href: "/diagnostico", label: "Diagnóstico" }
+    { href: "/diagnostico", label: "Diagnóstico" },
+    { href: "https://eventos.emetor.com.br/", label: "Bootcamp", external: true },
   ]
 
   return (
@@ -141,6 +142,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 onClick={(e) => {
                   if (link.href === "/diagnostico") {
                     e.preventDefault()
@@ -149,14 +151,14 @@ export function Header() {
                 }}
                 className={cn(
                   "relative transition-colors hover:text-accent group",
-                  pathname === link.href ? 'text-accent' : '',
+                  !link.external && pathname === link.href ? 'text-accent' : '',
                   isDarkTheme && pathname !== link.href ? "hover:text-white" : ""
                 )}
               >
                 {link.label}
                 <span className={cn(
                   "absolute -bottom-1 left-0 h-[2px] bg-accent transition-all duration-300",
-                  pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+                  !link.external && pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
                 )}></span>
               </Link>
             ))}
@@ -231,6 +233,7 @@ export function Header() {
                 >
                   <Link
                     href={link.href}
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     onClick={(e) => {
                       setIsMenuOpen(false)
                       if (link.href === "/diagnostico") {
@@ -240,7 +243,7 @@ export function Header() {
                     }}
                     className={cn(
                       "text-4xl font-bold tracking-tighter transition-all hover:translate-x-4 inline-block",
-                      pathname === link.href ? "text-accent" : "text-white/40"
+                      !link.external && pathname === link.href ? "text-accent" : "text-white/40"
                     )}
                   >
                     {link.label}
