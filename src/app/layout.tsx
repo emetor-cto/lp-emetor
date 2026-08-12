@@ -40,9 +40,9 @@ export default function RootLayout({
       >
         <Header />
 
-        <div className="flex-1 flex flex-col min-h-0 pt-[64px] md:pt-[80px]">
-          <main className="flex-1 bg-white rounded-[24px] overflow-y-auto relative shadow-2xl flex flex-col scroll-smooth">
-            <div className="flex-1">
+        <div className="flex-1 flex flex-col min-h-0 pt-0">
+          <main className="flex-1 bg-white rounded-[32px] md:rounded-[40px] overflow-y-auto relative shadow-2xl flex flex-col scroll-smooth">
+            <div className="flex-1 pt-[80px]">
               {children}
             </div>
             <Footer />

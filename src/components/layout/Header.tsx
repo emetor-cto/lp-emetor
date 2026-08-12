@@ -17,53 +17,9 @@ const navLinks = [
   { href: "https://eventos.emetor.com.br/", label: "Bootcamp", external: true },
 ]
 
-
-const TAB_PAD = 34
-const TAB_SLANT = 32
-
 export function Header() {
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const headerContainerRef = useRef<HTMLDivElement>(null)
-  const [tabMetrics, setTabMetrics] = useState<{ left: number; width: number } | null>(null)
-  const [activeHref, setActiveHref] = useState<string>(pathname)
-  const linkRefs = useRef<Map<string, HTMLAnchorElement | null>>(new Map())
-
-  const updateTab = useCallback((href: string) => {
-    const linkEl = linkRefs.current.get(href)
-    const containerEl = headerContainerRef.current
-    if (!linkEl || !containerEl) return
-    const containerRect = containerEl.getBoundingClientRect()
-    const linkRect = linkEl.getBoundingClientRect()
-    setTabMetrics({
-      left: linkRect.left - containerRect.left - TAB_PAD - TAB_SLANT,
-      width: linkRect.width + (TAB_PAD + TAB_SLANT) * 2,
-    })
-  }, [])
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-  }, [isMenuOpen])
-
-  useEffect(() => {
-    setActiveHref(pathname)
-    const timer = setTimeout(() => updateTab(pathname), 80)
-    return () => clearTimeout(timer)
-  }, [pathname, updateTab])
-
-  const onNavHover = (href: string) => {
-    setActiveHref(href)
-    updateTab(href)
-  }
-
-  const onNavLeave = () => {
-    setActiveHref(pathname)
-    updateTab(pathname)
-  }
 
   const menuVariants = {
     closed: { opacity: 0, x: "100%", transition: { type: "spring", stiffness: 300, damping: 30 } },
@@ -73,13 +29,17 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-50 pointer-events-none px-[60px] pt-0">
-        <div ref={headerContainerRef} className="relative w-full h-[64px] md:h-[80px]">
+        <div className="relative w-full h-[64px] md:h-[80px]">
 
-          {/* HEADER BACKGROUND — fully black */}
-          <div className="absolute inset-0 bg-[#0A0A0A] z-0 pointer-events-auto" />
+          <svg className="absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
+            <path
+              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 640 80 C 604 80, 586 20, 550 20 L 180 20 C 144 20, 126 80, 90 80 L 40 80 Q 0 80, 0 112 Z"
+              fill="#0A0A0A"
+            />
+          </svg>
 
           {/* LOGO */}
-          <div className="absolute top-0 left-0 h-full flex items-center px-4 md:px-6 z-30 pointer-events-auto">
+          <div className="absolute top-0 left-0 w-[100px] h-full pointer-events-auto flex items-center px-4 md:px-6 z-30">
             <Link href="/" className="relative h-6 md:h-8 w-24 md:w-32 transition-transform hover:scale-105">
               <Image
                 src={logoBranca}
@@ -92,39 +52,17 @@ export function Header() {
             </Link>
           </div>
 
-          {/* MOVING FOLDER TAB matching HeroSection background color (#FFFFFF) */}
-          {tabMetrics && (
-            <motion.div
-              className="absolute top-[16px] md:top-[20px] bottom-0 z-[22] pointer-events-none"
-              animate={{ left: tabMetrics.left, width: tabMetrics.width }}
-              initial={{ left: tabMetrics.left, width: tabMetrics.width }}
-              transition={{ type: "spring", stiffness: 440, damping: 38 }}
-            >
-              <svg className="w-full h-full" viewBox="0 0 100 60" preserveAspectRatio="none" fill="none">
-                <path
-                  d="M 0 60 L 22 10 Q 26 0 36 0 L 64 0 Q 74 0 78 10 L 100 60 Z"
-                  fill="#FFFFFF"
-                />
-              </svg>
-            </motion.div>
-          )}
+          {/* RIGHT NAV & CTA NOTCH */}
+          <div className="absolute top-0 right-0 w-[560px] h-full pointer-events-auto flex items-center justify-end px-4 md:px-6 z-30">
 
-          {/* NAV LINKS — z-30 so they render above the moving tab */}
-          <div className="absolute top-0 right-0 w-[80px] md:w-[900px] lg:w-[1020px] h-full pointer-events-auto flex items-center justify-end px-4 md:px-6 z-30">
-
-            <nav
-              onMouseLeave={onNavLeave}
-              className="hidden md:flex h-full items-center gap-14 lg:gap-20 text-[11px] font-bold tracking-widest uppercase relative mr-12 lg:mr-16"
-            >
+            <nav className="hidden md:flex h-full items-center gap-6 lg:gap-8 text-[11px] font-bold tracking-widest uppercase relative mr-6 md:mr-8">
               {navLinks.map((link) => {
-                const isTabUnder = activeHref === link.href
+                const isActive = !link.external && pathname === link.href
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    ref={(el) => { linkRefs.current.set(link.href, el) }}
                     {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    onMouseEnter={() => onNavHover(link.href)}
                     onClick={(e) => {
                       if (link.href === "/diagnostico") {
                         e.preventDefault()
@@ -132,8 +70,8 @@ export function Header() {
                       }
                     }}
                     className={cn(
-                      "h-full flex items-center relative transition-colors duration-300 font-bold",
-                      isTabUnder ? "text-[#0A0A0A]" : "text-white/70 hover:text-white"
+                      "h-full flex items-center justify-center text-center leading-none whitespace-nowrap relative transition-colors duration-300 font-bold",
+                      isActive ? "text-[#b9915e]" : "text-white/70 hover:text-white"
                     )}
                   >
                     {link.label}
