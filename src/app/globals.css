@@ -18,8 +18,8 @@
 }
 
 :root {
-  --background: #fefaef;
-  --foreground: #182350;
+  --background: #0A0A0A;
+  --foreground: #ffffff;
   --primary: #182350;
   --primary-hover: #0d1430;
   --accent: #b9915e;
@@ -37,8 +37,6 @@ html {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: var(--font-sans), sans-serif;
   scroll-behavior: smooth;
   min-height: 100%;

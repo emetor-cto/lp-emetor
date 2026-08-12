@@ -34,12 +34,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="antialiased flex min-h-screen flex-col bg-white">
+      <body 
+        className="antialiased min-h-screen text-neutral-900 selection:bg-[#b9915e] selection:text-white flex flex-col"
+        style={{ backgroundColor: '#0A0A0A' }}
+      >
         <Header />
-        <main className="flex-1 relative">
-          {children}
-        </main>
-        <Footer />
+        
+        <div className="flex-1 flex flex-col px-3 md:px-4 lg:px-6 pt-[16px] md:pt-[20px] pb-0">
+          <main className="flex-1 bg-[#EDEDEC] rounded-[24px] relative overflow-hidden shadow-2xl">
+            {children}
+          </main>
+        </div>
+
+        <div className="px-3 md:px-4 lg:px-6">
+          <Footer />
+        </div>
+        
         <DiagnosticoOverlay />
       </body>
     </html>

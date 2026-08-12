@@ -1,69 +1,49 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { AltArrowRight, MenuDots, CloseCircle } from "@solar-icons/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/utils/utils"
 
-import logoPreta from "@/assets/logo-preta.png"
 import logoBranca from "@/assets/logo-branca.png"
 import { openDiagnostico } from "@/lib/open-diagnostico"
 
+const navLinks = [
+  { href: "/", label: "Início" },
+  { href: "/quem-somos", label: "Quem Somos" },
+  { href: "/diagnostico", label: "Diagnóstico" },
+  { href: "https://eventos.emetor.com.br/", label: "Bootcamp", external: true },
+]
+
+// SVG for slanted (inclined) curve on the left - 30 degree diagonal with 12px smooth rounded corners
+const SlantLeft = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    {/* Main black shape with top-right rounded corner */}
+    <path d="M64 0 L0 0 L0 80 L12 80 L45.5 30 Q52 20, 64 20 Z" fill="#0A0A0A" />
+    {/* Gray corner cover to create the bottom-left rounded corner (negative space) */}
+    <path d="M0 80 Q12 80, 18.5 70 L18.5 80 Z" fill="#EDEDEC" />
+  </svg>
+)
+
+// SVG for slanted (inclined) curve on the right - 30 degree diagonal with 12px smooth rounded corners
+const SlantRight = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    {/* Main black shape with top-left rounded corner */}
+    <path d="M0 0 L64 0 L64 80 L52 80 L18.5 30 Q12 20, 0 20 Z" fill="#0A0A0A" />
+    {/* Gray corner cover to create the bottom-right rounded corner (negative space) */}
+    <path d="M64 80 Q52 80, 45.5 70 L45.5 80 Z" fill="#EDEDEC" />
+  </svg>
+)
+
 export function Header() {
   const pathname = usePathname()
-  const router = useRouter()
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [isDarkTheme, setIsDarkTheme] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | null>(null)
+  const linkRefs = useRef<Map<string, HTMLAnchorElement | null>>(new Map())
 
-  useEffect(() => {
-    const checkHeaderTheme = () => {
-      const headerBottom = 82 // altura do header para verificação de intersecção
-      const darkSections = document.querySelectorAll('[data-header-theme="dark"]')
-      let isDark = false
-      darkSections.forEach((section) => {
-        const rect = section.getBoundingClientRect()
-        if (rect.top <= headerBottom && rect.bottom >= 20) {
-          isDark = true
-        }
-      })
-      setIsDarkTheme(isDark)
-    }
-
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0
-      setScrollProgress(progress)
-      checkHeaderTheme()
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    window.addEventListener("resize", checkHeaderTheme)
-
-    // Checar imediatamente e após transições do DOM/Framer Motion
-    checkHeaderTheme()
-    const t1 = setTimeout(checkHeaderTheme, 50)
-    const t2 = setTimeout(checkHeaderTheme, 300)
-    const t3 = setTimeout(checkHeaderTheme, 800)
-
-    const observer = new MutationObserver(() => {
-      checkHeaderTheme()
-    })
-    observer.observe(document.body, { childList: true, subtree: true })
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", checkHeaderTheme)
-      clearTimeout(t1)
-      clearTimeout(t2)
-      clearTimeout(t3)
-      observer.disconnect()
-    }
-  }, [pathname])
-
-  // Lock scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden"
@@ -72,138 +52,150 @@ export function Header() {
     }
   }, [isMenuOpen])
 
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      x: "100%",
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30
-      }
-    },
-    opened: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30
-      }
+  useEffect(() => {
+    const activeLink = linkRefs.current.get(pathname)
+    const navEl = navRef.current
+    if (activeLink && navEl) {
+      const navRect = navEl.getBoundingClientRect()
+      const linkRect = activeLink.getBoundingClientRect()
+      setIndicatorStyle({
+        left: linkRect.left - navRect.left,
+        width: linkRect.width,
+      })
+    } else {
+      setIndicatorStyle(null)
     }
-  } as const
+  }, [pathname])
 
-  const navLinks = [
-    { href: "/", label: "Início" },
-    { href: "/quem-somos", label: "Quem Somos" },
-    { href: "/diagnostico", label: "Diagnóstico" },
-    { href: "https://eventos.emetor.com.br/", label: "Bootcamp", external: true },
-  ]
+  const onNavHover = (href: string) => {
+    const el = linkRefs.current.get(href)
+    const navEl = navRef.current
+    if (el && navEl) {
+      const navRect = navEl.getBoundingClientRect()
+      const linkRect = el.getBoundingClientRect()
+      setIndicatorStyle({ left: linkRect.left - navRect.left, width: linkRect.width })
+    }
+  }
+
+  const onNavLeave = () => {
+    const activeLink = linkRefs.current.get(pathname)
+    const navEl = navRef.current
+    if (activeLink && navEl) {
+      const navRect = navEl.getBoundingClientRect()
+      const linkRect = activeLink.getBoundingClientRect()
+      setIndicatorStyle({ left: linkRect.left - navRect.left, width: linkRect.width })
+    } else {
+      setIndicatorStyle(null)
+    }
+  }
+
+  const menuVariants = {
+    closed: { opacity: 0, x: "100%", transition: { type: "spring", stiffness: 300, damping: 30 } },
+    opened: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 30 } },
+  } as const
 
   return (
     <>
-      <header className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-500 border-b",
-        isDarkTheme
-          ? "bg-black/20 backdrop-blur-2xl border-white/10"
-          : "bg-white/30 backdrop-blur-xl border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]"
-      )}>
-        {/* Scroll Progress Bar */}
-        <div
-          className={cn(
-            "absolute bottom-[-1px] left-0 h-[2px] bg-accent transition-all duration-150 ease-out z-10",
-            isDarkTheme
-              ? "shadow-[0_0_15px_rgba(185,145,94,0.6)]"
-              : "shadow-[0_0_10px_rgba(185,145,94,0.3)]"
-          )}
-          style={{ width: `${scrollProgress}%` }}
-        />
+      {/* Padding matches the main layout container perfectly */}
+      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none px-3 md:px-4 lg:px-6 pt-0">
+        <div className="relative w-full h-[64px] md:h-[80px]">
+          
+          {/* SOLID HEADER MASK to perfectly hide scrolling content underneath */}
+          <div className="absolute top-0 left-0 w-full h-[16px] md:h-[20px] bg-[#0A0A0A] z-0 pointer-events-auto" />
+          <div className="absolute top-[16px] md:top-[20px] left-0 w-full bottom-0 bg-[#EDEDEC] rounded-t-[24px] z-0 pointer-events-auto" />
 
-        <div className="container mx-auto flex h-[80px] items-center justify-between px-6">
-          <Link href="/" className="flex items-center group relative z-[60]">
-            <div className="relative h-7 md:h-8 w-28 md:w-32 transition-all duration-500 group-hover:scale-[1.02]">
+          {/* =======================
+              TOP-LEFT (LOGO) NOTCH 
+              ======================= */}
+          <div className="absolute top-0 left-0 w-[140px] md:w-[180px] lg:w-[200px] h-full bg-[#0A0A0A] pointer-events-auto flex items-center px-4 md:px-6 z-20">
+            <Link href="/" className="relative h-6 md:h-8 w-24 md:w-32 transition-transform hover:scale-105">
               <Image
-                src={isDarkTheme || isMenuOpen ? logoBranca : logoPreta}
+                src={logoBranca}
                 alt="Emetor Logo"
                 fill
                 sizes="(max-width: 768px) 128px, 160px"
                 className="object-contain"
                 priority
               />
-            </div>
-          </Link>
+            </Link>
+          </div>
+          
+          {/* Slanted Transition Curve for Left Notch */}
+          <SlantLeft className="absolute top-0 left-[140px] md:left-[180px] lg:left-[200px] w-[56px] md:w-[64px] -translate-x-[12px] h-full pointer-events-none z-30" />
 
-          {/* Desktop Navigation */}
-          <nav className={cn(
-            "hidden md:flex gap-12 text-[11px] font-bold tracking-widest uppercase transition-colors duration-500",
-            isDarkTheme ? "text-white/60" : "text-neutral-600"
-          )}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                onClick={(e) => {
-                  if (link.href === "/diagnostico") {
-                    e.preventDefault()
-                    openDiagnostico()
-                  }
-                }}
-                className={cn(
-                  "relative transition-colors hover:text-accent group",
-                  !link.external && pathname === link.href ? 'text-accent' : '',
-                  isDarkTheme && pathname !== link.href ? "hover:text-white" : ""
-                )}
-              >
-                {link.label}
-                <span className={cn(
-                  "absolute -bottom-1 left-0 h-[2px] bg-accent transition-all duration-300",
-                  !link.external && pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
-                )}></span>
-              </Link>
-            ))}
-          </nav>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center">
-            <button
-              onClick={() => openDiagnostico()}
-              className={cn(
-                "group relative flex items-center font-bold py-1.5 px-2 rounded-full transition-all duration-500 ease-in-out min-w-[180px] h-12 overflow-hidden shadow-lg hover:bg-accent hover:text-white",
-                isDarkTheme
-                  ? "bg-white text-primary shadow-white/5"
-                  : "bg-primary text-white shadow-primary/5"
-              )}
+          {/* =======================
+              TOP-RIGHT (NAV) NOTCH 
+              ======================= */}
+          <div className="absolute top-0 right-0 w-[80px] md:w-[580px] lg:w-[640px] h-full bg-[#0A0A0A] pointer-events-auto flex items-center justify-end px-4 md:px-6 z-20">
+            
+            {/* Desktop Navigation */}
+            <nav
+              ref={navRef}
+              onMouseLeave={onNavLeave}
+              className="hidden md:flex gap-8 lg:gap-10 text-[11px] font-bold tracking-widest uppercase text-white/70 relative mr-6"
             >
-              <span className="flex-1 text-center text-[11px] uppercase tracking-wider transition-all duration-500 ease-in-out group-hover:translate-x-[-12px] translate-x-[12px]">
-                Fale Conosco
-              </span>
-              <div className={cn(
-                "absolute left-2 group-hover:left-[calc(100%-40px)] rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all duration-500 ease-in-out",
-                isDarkTheme ? "bg-neutral-100" : "bg-white"
-              )}>
-                <AltArrowRight size={18} className="text-primary group-hover:text-accent transition-colors duration-500" />
-              </div>
+              {indicatorStyle && (
+                <motion.span
+                  layoutId="nav-indicator"
+                  className="absolute -bottom-[20px] h-[2px] bg-[#b9915e]"
+                  style={{ left: indicatorStyle.left, width: indicatorStyle.width }}
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+
+              {navLinks.map((link) => {
+                const isActive = !link.external && pathname === link.href
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    ref={(el) => { linkRefs.current.set(link.href, el) }}
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    onMouseEnter={() => onNavHover(link.href)}
+                    onClick={(e) => {
+                      if (link.href === "/diagnostico") {
+                        e.preventDefault()
+                        openDiagnostico()
+                      }
+                    }}
+                    className={cn(
+                      "relative transition-colors hover:text-white pb-1",
+                      isActive ? "text-white" : ""
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
+            </nav>
+
+            {/* Desktop CTA */}
+            <div className="hidden md:flex items-center">
+              <button
+                onClick={() => openDiagnostico()}
+                className="group relative flex items-center font-bold py-1 px-1.5 rounded-full transition-all duration-500 ease-in-out min-w-[150px] h-10 overflow-hidden bg-white text-[#0A0A0A] hover:bg-[#b9915e] hover:text-white shadow-lg"
+              >
+                <span className="flex-1 text-center text-[10px] uppercase tracking-wider transition-all duration-500 ease-in-out group-hover:-translate-x-3 translate-x-3">
+                  Fale Conosco
+                </span>
+                <div className="absolute left-1 group-hover:left-[calc(100%-36px)] rounded-full w-8 h-8 flex items-center justify-center transition-all duration-500 ease-in-out bg-[#0A0A0A] text-white">
+                  <AltArrowRight size={14} className="group-hover:text-white transition-colors duration-500" />
+                </div>
+              </button>
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              className="md:hidden relative z-[60] p-1 text-white hover:text-[#b9915e] transition-colors"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <MenuDots size={28} />
             </button>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden relative z-[60] p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <CloseCircle size={28} className="text-white" />
-            ) : (
-              <MenuDots
-                size={28}
-                className={cn(
-                  "transition-colors",
-                  isDarkTheme ? "text-white" : "text-neutral-900"
-                )}
-              />
-            )}
-          </button>
+          {/* Slanted Transition Curve for Right Notch */}
+          <SlantRight className="absolute top-0 right-[80px] md:right-[580px] lg:right-[640px] w-[56px] md:w-[64px] translate-x-[12px] h-full pointer-events-none z-30" />
+
         </div>
       </header>
 
@@ -215,13 +207,14 @@ export function Header() {
             animate="opened"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 z-[55] bg-primary flex flex-col justify-center px-10"
+            className="fixed inset-0 z-[100] bg-[#0A0A0A] flex flex-col justify-center px-10"
           >
-            {/* Decorative Background Elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute top-[-10%] right-[-10%] w-full h-full bg-white/5 blur-[120px] rounded-full" />
-              <div className="absolute bottom-[-10%] left-[-10%] w-full h-full bg-black/10 blur-[120px] rounded-full" />
-            </div>
+            <button 
+              className="absolute top-8 right-8 text-white p-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <CloseCircle size={32} />
+            </button>
 
             <nav className="relative z-10 flex flex-col gap-8">
               {navLinks.map((link, i) => (
@@ -243,7 +236,7 @@ export function Header() {
                     }}
                     className={cn(
                       "text-4xl font-bold tracking-tighter transition-all hover:translate-x-4 inline-block",
-                      !link.external && pathname === link.href ? "text-accent" : "text-white/40"
+                      !link.external && pathname === link.href ? "text-[#b9915e]" : "text-white/40"
                     )}
                   >
                     {link.label}
@@ -251,30 +244,6 @@ export function Header() {
                 </motion.div>
               ))}
             </nav>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-20 relative z-10"
-            >
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false)
-                  openDiagnostico()
-                }}
-                className="flex items-center gap-4 text-white group"
-              >
-                <span className="text-lg font-bold tracking-widest uppercase">Iniciar Diagnóstico</span>
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110">
-                  <AltArrowRight size={24} className="text-accent" />
-                </div>
-              </button>
-            </motion.div>
-
-            <div className="absolute bottom-12 left-10 text-white/20 text-[10px] font-bold tracking-[0.5em] uppercase">
-              Emetor © 2026
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
