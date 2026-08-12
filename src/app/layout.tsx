@@ -33,23 +33,22 @@ export default function RootLayout({
   diagnostico: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body 
-        className="antialiased min-h-screen text-neutral-900 selection:bg-[#b9915e] selection:text-white flex flex-col"
+    <html lang="pt-BR" className="h-full overflow-hidden">
+      <body
+        className="antialiased h-screen overflow-hidden text-neutral-900 selection:bg-[#b9915e] selection:text-white flex flex-col px-[60px] pb-[60px] pt-0"
         style={{ backgroundColor: '#0A0A0A' }}
       >
         <Header />
-        
-        <div className="flex-1 flex flex-col px-3 md:px-4 lg:px-6 pt-[16px] md:pt-[20px] pb-0">
-          <main className="flex-1 bg-[#EDEDEC] rounded-[24px] relative overflow-hidden shadow-2xl">
-            {children}
+
+        <div className="flex-1 flex flex-col min-h-0 pt-[64px] md:pt-[80px]">
+          <main className="flex-1 bg-white rounded-[24px] overflow-y-auto relative shadow-2xl flex flex-col scroll-smooth">
+            <div className="flex-1">
+              {children}
+            </div>
+            <Footer />
           </main>
         </div>
 
-        <div className="px-3 md:px-4 lg:px-6">
-          <Footer />
-        </div>
-        
         <DiagnosticoOverlay />
       </body>
     </html>

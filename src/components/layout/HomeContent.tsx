@@ -2,7 +2,6 @@
 import { HeroSection } from "@/components/sections/HeroSection"
 import { ProblemSection } from "@/components/sections/ProblemSection"
 import { SolutionSection } from "@/components/sections/SolutionSection"
-import { BenefitsSection } from "@/components/sections/BenefitsSection"
 import { MethodologySection } from "@/components/sections/MethodologySection"
 import { FinalCTASection } from "@/components/sections/FinalCTASection"
 import { PartnersSection } from "@/components/sections/PartnersSection"
@@ -16,7 +15,6 @@ export function HomeContent() {
       </div>
       <ProblemSection />
       <SolutionSection />
-      <BenefitsSection />
       <MethodologySection />
       <FinalCTASection />
     </div>

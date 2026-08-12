@@ -31,15 +31,27 @@
   text-rendering: optimizeLegibility;
 }
 
-html {
+html, body {
   height: 100%;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 body {
   font-family: var(--font-sans), sans-serif;
-  scroll-behavior: smooth;
-  min-height: 100%;
+}
+
+main::-webkit-scrollbar {
+  width: 6px;
+}
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+main::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+main::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Global Typography System - Strict Scale */
