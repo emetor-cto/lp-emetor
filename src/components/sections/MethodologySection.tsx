@@ -1,166 +1,147 @@
 "use client"
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion"
-import { useRef } from "react"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useRef, useState, useEffect } from "react"
 import { cn } from "@/utils/utils"
 
 const steps = [
   {
     number: "01",
+    phase: "FASE 01 — DIAGNÓSTICO",
     title: "Diagnóstico de Profundidade",
     description: "Mergulhamos na sua operação atual para identificar exatamente onde o dinheiro está sendo perdido e onde estão os gargalos de eficiência."
   },
   {
     number: "02",
+    phase: "FASE 02 — ESTRATÉGIA",
     title: "Direção & Estratégia",
     description: "Desenhamos o novo mapa de processos e escolhemos as tecnologias que farão a sua empresa escalar sem aumentar o caos."
   },
   {
     number: "03",
+    phase: "FASE 03 — ESTRUTURAÇÃO",
     title: "Estruturação Sistêmica",
     description: "Implementamos as ferramentas, automatizamos fluxos e garantimos que os dados fluam sem interrupções entre as áreas."
   },
   {
     number: "04",
+    phase: "FASE 04 — PERFORMANCE",
     title: "Cultura de Performance",
     description: "Treinamos seu time para operar sob o novo modelo e estabelecemos rituais de controle para garantir a melhoria contínua."
   }
 ]
 
-function MethodologyStep({
-  step,
-  i,
-  total,
-  scrollYProgress,
-  isLast = false
-}: {
-  step: typeof steps[0],
-  i: number,
-  total: number,
-  scrollYProgress: MotionValue<number>,
-  isLast?: boolean
-}) {
-  const segment = 1 / total
-  const start = i * segment
-  const end = (i + 1) * segment
-
-  const isActive = useTransform(scrollYProgress, [start, end], [0.3, 1])
-  const dotScale = useTransform(scrollYProgress, [start, end], [0.8, 1.2])
-  const dotColor = useTransform(
-    scrollYProgress,
-    [start, end],
-    ["#e5e7eb", "#b9915e"]
-  )
-
-  return (
-    <div className={cn(
-      "group relative pl-12 md:pl-20 py-16 md:py-32",
-      isLast ? "pb-0" : ""
-    )}>
-      <div className="absolute left-0 top-[68px] md:top-[140px] w-8 h-8 md:w-[50px] md:h-[50px] rounded-full bg-white border border-neutral-100 flex items-center justify-center z-20 shadow-sm">
-        <motion.div
-          style={{ backgroundColor: dotColor, scale: dotScale }}
-          className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full"
-        />
-      </div>
-
-      <div className="relative">
-        <motion.span
-          style={{ opacity: isActive }}
-          className="text-accent font-mono text-[10px] md:text-xs font-bold mb-3 md:mb-4 block uppercase tracking-[0.2em]"
-        >
-          Fase {step.number}
-        </motion.span>
-        <h3 className="text-xl md:text-4xl font-bold text-neutral-900 mb-4 md:mb-6 tracking-tight">
-          {step.title}
-        </h3>
-        <p className="text-sm md:text-xl text-neutral-500 font-medium leading-relaxed max-w-xl">
-          {step.description}
-        </p>
-      </div>
-    </div>
-  )
-}
-
 export function MethodologySection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const timelineRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start center", "end center"]
+    target: containerRef,
+    offset: ["start start", "end end"]
   })
 
-  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1])
+  // Smooth step index calculation based on scroll position
+  const stepProgress = useTransform(scrollYProgress, [0, 0.33, 0.66, 1], [0, 1, 2, 3])
+
+  useEffect(() => {
+    const unsubscribe = stepProgress.on("change", (latest) => {
+      const rounded = Math.min(Math.max(Math.round(latest), 0), steps.length - 1)
+      if (rounded !== activeIndex) {
+        setActiveIndex(rounded)
+      }
+    })
+    return () => unsubscribe()
+  }, [stepProgress, activeIndex])
+
+  const scrollToStep = (index: number) => {
+    if (!containerRef.current) return
+    const containerTop = containerRef.current.offsetTop
+    const containerHeight = containerRef.current.offsetHeight
+    const targetScroll = containerTop + (containerHeight / (steps.length - 1)) * index
+    window.scrollTo({ top: targetScroll, behavior: "smooth" })
+  }
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-white py-24 md:py-0"
-      data-header-theme="light"
-    >
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="lg:hidden mb-16">
-          <span className="text-accent font-bold uppercase tracking-[0.4em] text-[10px] mb-6 block">Metodologia Emetor</span>
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 leading-[1.1] mb-6">
-            Como transformamos sua <span className="text-accent italic">operação em vantagem competitiva.</span>
-          </h2>
-          <p className="text-lg text-neutral-500 font-medium leading-relaxed">
-            Um processo linear e disciplinado focado em eliminar desperdícios e escalar performance através da tecnologia.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-          <div className="lg:col-span-5 hidden lg:block">
-            <div className="sticky top-0 h-screen flex flex-col justify-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-              >
-                <span className="text-accent font-bold uppercase tracking-[0.4em] text-[10px] mb-8 block">Metodologia Emetor</span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 leading-[1.05] mb-8">
-                  Como transformamos sua <span className="text-accent italic">operação em vantagem competitiva.</span>
-                </h2>
-                <p className="text-xl text-neutral-500 font-medium leading-relaxed max-w-md">
-                  Um processo linear e disciplinado focado em eliminar desperdícios e escalar performance através da tecnologia.
-                </p>
-              </motion.div>
+    <section ref={containerRef} className="relative bg-white h-[320vh]">
+      {/* Sticky Fullscreen Story Stage */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden py-12">
+        <div className="container mx-auto px-6 md:px-12 max-w-5xl relative z-10 flex flex-col justify-center h-full max-h-[800px]">
+          
+          {/* Restored Section Header (Título + Subtítulo sempre visíveis) */}
+          <div className="mb-8 md:mb-12">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="h-[1px] w-8 bg-accent/30" />
+              <span className="text-accent font-bold uppercase tracking-[0.2em] text-xs">
+                Metodologia Emetor
+              </span>
             </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 leading-[1.1] mb-4 max-w-3xl">
+              Como transformamos sua <span className="text-accent font-medium">operação em vantagem competitiva.</span>
+            </h2>
+            <p className="text-base sm:text-lg text-neutral-500 font-medium leading-relaxed max-w-2xl">
+              Um processo linear e disciplinado focado em eliminar desperdícios e escalar performance através da tecnologia.
+            </p>
           </div>
 
-          <div className="lg:col-span-7 relative pt-0 lg:pt-[30vh] pb-0 lg:pb-[60vh]">
-            <div className="relative">
-              <div
-                ref={timelineRef}
-                className="absolute left-[15px] md:left-[25px] top-[84px] md:top-[165px] bottom-[160px] md:bottom-[250px] w-px pointer-events-none"
-              >
-                <div className="w-full h-full bg-neutral-100" />
+          {/* Interactive Story Container (Sem borda e sem sombra) */}
+          <div className="relative bg-white rounded-[28px] py-4 md:py-6 px-2 md:px-4 overflow-hidden flex items-center gap-6 md:gap-10">
+            
+            {/* Left Side: Smaller, Closer Minimal Dots Perfectly Centered Vertically */}
+            <div className="flex flex-col items-center justify-center gap-2.5 z-20 self-center">
+              {steps.map((step, idx) => {
+                const isActive = idx === activeIndex
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => scrollToStep(idx)}
+                    aria-label={`Ir para ${step.phase}`}
+                    className="group relative flex items-center justify-center p-0.5 focus:outline-none"
+                  >
+                    <motion.div
+                      animate={{
+                        scale: isActive ? 1.2 : 1,
+                        backgroundColor: isActive ? "#0A0A0A" : "#D1D5DB",
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className={cn(
+                        "rounded-full transition-all duration-300",
+                        isActive
+                          ? "w-2.5 h-2.5 opacity-100"
+                          : "w-2 h-2 hover:bg-neutral-400 opacity-50"
+                      )}
+                    />
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Right Side: Step Animated Content (Vertically centered) */}
+            <div className="flex-1 min-h-[160px] md:min-h-[180px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
                 <motion.div
-                  style={{ scaleY, originY: 0 }}
-                  className="absolute inset-0 w-[2px] bg-accent z-10"
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-col items-start"
                 >
-                  <motion.div
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-5 bg-accent blur-lg rounded-full"
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </motion.div>
-              </div>
+                  <span className="text-[#b9915e] font-mono text-xs md:text-sm font-bold uppercase tracking-[0.25em] mb-2.5 block">
+                    {steps[activeIndex].phase}
+                  </span>
 
-              <div className="flex flex-col">
-                {steps.map((step, i) => (
-                  <MethodologyStep
-                    key={i}
-                    step={step}
-                    i={i}
-                    total={steps.length}
-                    scrollYProgress={scrollYProgress}
-                    isLast={i === steps.length - 1}
-                  />
-                ))}
-              </div>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 leading-[1.15] mb-3.5">
+                    {steps[activeIndex].title}
+                  </h3>
+
+                  <p className="text-base sm:text-lg md:text-xl text-neutral-500 font-medium leading-relaxed max-w-2xl">
+                    {steps[activeIndex].description}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
+
           </div>
+
         </div>
       </div>
     </section>

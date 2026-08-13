@@ -24,34 +24,20 @@
   --primary-hover: #0d1430;
   --accent: #b9915e;
   --accent-hover: #9c784c;
-  
+
   /* Antialiasing and Rendering Optimization */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans), sans-serif;
-}
-
-main::-webkit-scrollbar {
-  width: 6px;
-}
-main::-webkit-scrollbar-track {
-  background: transparent;
-}
-main::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 3px;
-}
-main::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background-color: #0A0A0A;
 }
 
 /* Global Typography System - Strict Scale */
@@ -74,7 +60,8 @@ h3 {
   font-weight: 600;
 }
 
-p, body {
+p,
+body {
   font-size: 18px;
   font-weight: 400;
   line-height: 1.6;
@@ -82,5 +69,6 @@ p, body {
 
 small {
   font-size: 14px;
-  color: #6B7280; /* Secondary Color */
+  color: #6B7280;
+  /* Secondary Color */
 }

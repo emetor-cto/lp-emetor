@@ -28,34 +28,43 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none px-[60px] pt-0">
+      <header className="fixed top-0 left-0 w-full z-50 pointer-events-none px-4 sm:px-8 md:px-[60px] pt-0">
         <div className="relative w-full h-[64px] md:h-[80px]">
 
-          <svg className="absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
+          {/* Reduced Web & Mobile SVG Notch (< 1280px / 1200px) */}
+          <svg className="block xl:hidden absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
             <path
-              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 640 80 C 604 80, 586 20, 550 20 L 180 20 C 144 20, 126 80, 90 80 L 40 80 Q 0 80, 0 112 Z"
+              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 750 80 C 714 80, 696 20, 660 20 L 360 20 C 324 20, 306 80, 270 80 L 40 80 Q 0 80, 0 112 Z"
+              fill="#0A0A0A"
+            />
+          </svg>
+
+          {/* Large Fullscreen SVG Notch (>= 1280px / 1200px) */}
+          <svg className="hidden xl:block absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
+            <path
+              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 640 80 C 604 80, 586 20, 550 20 L 230 20 C 194 20, 176 80, 140 80 L 40 80 Q 0 80, 0 112 Z"
               fill="#0A0A0A"
             />
           </svg>
 
           {/* LOGO */}
-          <div className="absolute top-0 left-0 w-[100px] h-full pointer-events-auto flex items-center px-4 md:px-6 z-30">
-            <Link href="/" className="relative h-6 md:h-8 w-24 md:w-32 transition-transform hover:scale-105">
+          <div className="absolute top-0 left-0 w-[130px] sm:w-[170px] md:w-[200px] h-full pointer-events-auto flex items-center px-3 sm:px-6 z-30">
+            <Link href="/" className="relative h-6 sm:h-7 md:h-9 w-24 sm:w-28 md:w-36 transition-transform hover:scale-105">
               <Image
                 src={logoBranca}
                 alt="Emetor Logo"
                 fill
-                sizes="(max-width: 768px) 128px, 160px"
-                className="object-contain"
+                sizes="(max-width: 768px) 110px, 180px"
+                className="object-contain object-left"
                 priority
               />
             </Link>
           </div>
 
           {/* RIGHT NAV & CTA NOTCH */}
-          <div className="absolute top-0 right-0 w-[560px] h-full pointer-events-auto flex items-center justify-end px-4 md:px-6 z-30">
+          <div className="absolute top-0 right-0 w-[420px] xl:w-[560px] h-full pointer-events-auto flex items-center justify-end px-3 sm:px-6 z-30">
 
-            <nav className="hidden md:flex h-full items-center gap-6 lg:gap-8 text-[11px] font-bold tracking-widest uppercase relative mr-6 md:mr-8">
+            <nav className="hidden xl:flex h-full items-center gap-6 text-[11px] font-bold tracking-widest uppercase relative mr-8">
               {navLinks.map((link) => {
                 const isActive = !link.external && pathname === link.href
                 return (
@@ -80,22 +89,22 @@ export function Header() {
               })}
             </nav>
 
-            <div className="hidden md:flex items-center">
+            <div className="hidden xl:flex items-center">
               <button
                 onClick={() => openDiagnostico()}
-                className="group relative flex items-center font-bold py-1 px-1.5 rounded-full transition-all duration-500 ease-in-out min-w-[150px] h-10 overflow-hidden bg-white text-[#0A0A0A] hover:bg-[#b9915e] hover:text-white shadow-lg"
+                className="group relative flex items-center font-bold py-1 px-1.5 rounded-full transition-all duration-300 ease-in-out min-w-[150px] h-10 overflow-hidden bg-white text-[#0A0A0A] hover:bg-[#b9915e] hover:text-white shadow-lg"
               >
-                <span className="flex-1 text-center text-[10px] uppercase tracking-wider transition-all duration-500 ease-in-out group-hover:-translate-x-3 translate-x-3">
+                <span className="flex-1 text-center text-[10px] uppercase tracking-wider transition-all duration-300 ease-in-out group-hover:-translate-x-3 translate-x-3">
                   Fale Conosco
                 </span>
-                <div className="absolute left-1 group-hover:left-[calc(100%-36px)] rounded-full w-8 h-8 flex items-center justify-center transition-all duration-500 ease-in-out bg-[#0A0A0A] text-white">
-                  <AltArrowRight size={14} className="group-hover:text-white transition-colors duration-500" />
+                <div className="absolute left-1 group-hover:left-[calc(100%-36px)] rounded-full w-8 h-8 flex items-center justify-center transition-all duration-300 ease-in-out bg-[#0A0A0A] text-white">
+                  <AltArrowRight size={14} className="group-hover:text-white transition-colors duration-300" />
                 </div>
               </button>
             </div>
 
             <button
-              className="md:hidden relative z-[60] p-1 text-white hover:text-[#b9915e] transition-colors"
+              className="xl:hidden relative z-[60] p-1 text-white hover:text-[#b9915e] transition-colors"
               onClick={() => setIsMenuOpen(true)}
             >
               <MenuDots size={28} />

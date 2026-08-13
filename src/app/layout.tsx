@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { DiagnosticoOverlay } from "@/components/layout/DiagnosticoOverlay";
+import { PageTransition } from "@/components/layout/PageTransition";
 
 export default function RootLayout({
   children,
@@ -33,20 +34,34 @@ export default function RootLayout({
   diagnostico: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="h-full overflow-hidden">
+    <html lang="pt-BR">
       <body
-        className="antialiased h-screen overflow-hidden text-neutral-900 selection:bg-[#b9915e] selection:text-white flex flex-col px-[60px] pb-[60px] pt-0"
-        style={{ backgroundColor: '#0A0A0A' }}
+        className="antialiased min-h-screen bg-[#0A0A0A] text-neutral-900 selection:bg-[#b9915e] selection:text-white flex flex-col px-4 sm:px-8 md:px-[60px] pb-4 sm:pb-6 md:pb-8 pt-0 relative"
       >
         <Header />
 
-        <div className="flex-1 flex flex-col min-h-0 pt-0">
-          <main className="flex-1 bg-white rounded-[32px] md:rounded-[40px] overflow-y-auto relative shadow-2xl flex flex-col scroll-smooth">
+        <div className="flex-1 flex flex-col pt-0">
+          <main className="flex-1 bg-white rounded-[32px] md:rounded-[40px] relative shadow-2xl flex flex-col min-h-screen">
             <div className="flex-1 pt-[80px]">
-              {children}
+              <PageTransition>
+                {children}
+              </PageTransition>
             </div>
             <Footer />
           </main>
+        </div>
+
+        {/* Fixed Bottom Frame Bar & Outer Convex Corner Masks (Slim 32px Frame) */}
+        <div className="fixed bottom-0 left-0 right-0 h-4 sm:h-6 md:h-8 bg-[#0A0A0A] pointer-events-none z-40">
+          {/* Bottom Left Outer Corner Mask */}
+          <svg className="absolute bottom-[16px] sm:bottom-[24px] md:bottom-[32px] left-4 sm:left-8 md:left-[60px] w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-[#0A0A0A] fill-current pointer-events-none" viewBox="0 0 40 40">
+            <path d="M 0 0 L 0 40 L 40 40 C 17.91 40 0 22.09 0 0 Z" />
+          </svg>
+
+          {/* Bottom Right Outer Corner Mask */}
+          <svg className="absolute bottom-[16px] sm:bottom-[24px] md:bottom-[32px] right-4 sm:right-8 md:right-[60px] w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-[#0A0A0A] fill-current pointer-events-none" viewBox="0 0 40 40">
+            <path d="M 40 0 L 40 40 L 0 40 C 22.09 40 40 22.09 40 0 Z" />
+          </svg>
         </div>
 
         <DiagnosticoOverlay />
