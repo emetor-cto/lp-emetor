@@ -31,15 +31,20 @@ export function Header() {
       <header className="fixed top-0 left-0 w-full z-50 pointer-events-none px-4 sm:px-8 md:px-[60px] pt-0">
         <div className="relative w-full h-[64px] md:h-[80px]">
 
-          {/* Reduced Web & Mobile SVG Notch (< 1280px / 1200px) */}
-          <svg className="block xl:hidden absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
+          <svg className="block md:hidden absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
             <path
-              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 750 80 C 714 80, 696 20, 660 20 L 360 20 C 324 20, 306 80, 270 80 L 40 80 Q 0 80, 0 112 Z"
+              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1100 80 L 100 80 Q 0 80, 0 112 Z"
               fill="#0A0A0A"
             />
           </svg>
 
-          {/* Large Fullscreen SVG Notch (>= 1280px / 1200px) */}
+          <svg className="hidden md:block xl:hidden absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
+            <path
+              d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1157 80 L 43 80 Q 0 80, 0 112 Z"
+              fill="#0A0A0A"
+            />
+          </svg>
+
           <svg className="hidden xl:block absolute inset-0 w-full h-[112px] pointer-events-none z-0 overflow-visible" viewBox="0 0 1200 112" preserveAspectRatio="none">
             <path
               d="M 0 0 L 1200 0 L 1200 112 Q 1200 80, 1160 80 L 640 80 C 604 80, 586 20, 550 20 L 230 20 C 194 20, 176 80, 140 80 L 40 80 Q 0 80, 0 112 Z"
