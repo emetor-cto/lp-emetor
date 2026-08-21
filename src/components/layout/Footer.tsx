@@ -20,7 +20,7 @@ export function Footer() {
               SEDE INSTITUCIONAL
             </span>
             <a
-              href="https://maps.google.com/?q=MID+Work+Curitiba+PR"
+              href="https://share.google/NiSO035r6DyxrFaHd"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-2 text-xs text-neutral-300 hover:text-white transition-colors duration-300"

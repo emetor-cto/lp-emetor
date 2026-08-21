@@ -16,11 +16,10 @@ const expertiseTags = [
 
 export function AboutHero() {
   return (
-    <section className="relative w-full min-h-screen xl:h-[calc(100vh+20px)] flex items-center justify-center -mt-[80px] pt-[140px] sm:pt-[150px] md:pt-[160px] xl:pt-[120px] pb-12 xl:pb-0 overflow-hidden bg-white">
+    <section className="relative w-full min-h-screen xl:min-h-[calc(100vh+20px)] flex items-center justify-center -mt-[80px] pt-[130px] sm:pt-[140px] md:pt-[150px] xl:pt-[110px] pb-14 xl:pb-16 overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12 relative z-10 w-full flex items-center justify-center h-full">
-        <div className="grid grid-cols-12 gap-8 xl:gap-12 items-start xl:items-center w-full min-h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-12 gap-8 xl:gap-12 items-start xl:items-center w-full">
           
-          {/* Left Column: Headline, Paragraphs & CTA (Stacked on top below 1200px) */}
           <div className="col-span-12 xl:col-span-6 flex flex-col justify-center text-left py-2 sm:py-4">
             <motion.div
               initial={{ opacity: 0, y: 55 }}
