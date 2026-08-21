@@ -15,13 +15,21 @@ interface Message {
 }
 
 const botQuestions = [
-  "Hoje, quantos sistemas, planilhas e controles paralelos vocês usam para tocar a operação — e onde a informação mais se perde, duplica ou precisa ser recadastrada?",
+  "Hoje, quantos sistemas, planilhas e controles paralelos vocês usam para tocar a operação, e onde a informação mais se perde, duplica ou precisa ser recadastrada?",
   "Se você olhar para a operação de ponta a ponta, qual processo hoje mais consome tempo do time e mais depende de trabalho manual, conferência ou correção?",
   "Quando você precisa tomar uma decisão rápida, em quanto tempo consegue acessar um dado confiável? E você confia 100% nas planilhas e relatórios que recebe hoje?",
   "Quais áreas mais sofrem com falha de comunicação ou falta de integração entre sistemas e equipes? O que costuma dar errado na prática?",
-  "Se nada mudar nos próximos 6 meses, qual é o custo real disso para a empresa e para você como dono — em atraso, erro, dinheiro, cliente perdido, desgaste do time e tempo preso no operacional?",
+  "Se nada mudar nos próximos 6 meses, qual é o custo real disso para a empresa e para você como dono: em atraso, erro, dinheiro, cliente perdido, desgaste do time e tempo preso no operacional?",
   "Perfeito! Para que possamos te enviar uma análise detalhada desse cenário, qual é o seu melhor e-mail de contato?",
 ]
+
+const quickSuggestions: Record<number, string[]> = {
+  1: ["Mais de 5 planilhas e sistemas paralelos", "Falta de integração entre ERP e CRM", "Cadastros duplicados e 100% manuais"],
+  2: ["Emissão de relatórios e faturamento", "Conferência manual de pedidos e estoques", "Acompanhamento diário de tarefas"],
+  3: ["Demoramos dias para consolidar relatórios", "Dados desatualizados e dependem de conferência", "Decisões baseadas em estimativas"],
+  4: ["Falta de integração entre Vendas e Operação", "Desalinhamento entre Financeiro e Projetos", "Gargalos na passagem de bastão"],
+  5: ["Perda de margem e dinheiro por ineficiência", "Atraso nas entregas e insatisfação de clientes", "Dono preso no operacional sem tempo para crescer"],
+}
 
 const STORAGE_KEY = "emetor_diagnosis_state"
 
@@ -152,20 +160,23 @@ export function ChatSimulator() {
         { id: Date.now().toString(), text: botQuestions[questionIndex], sender: "bot" }
       ])
       setQuestionIndex(prev => prev + 1)
-    }, 1500)
+    }, 1200)
   }
 
   if (!isLoaded) return null
 
+  const currentSuggestions = quickSuggestions[questionIndex] || []
+
   return (
-    <div className="flex flex-col w-full max-w-3xl mx-auto h-auto relative bg-white px-4">
-      <div className="flex-1 space-y-4 py-8">
+    <div className="flex flex-col w-full max-w-3xl mx-auto h-auto relative bg-white px-2 sm:px-4">
+      <div className="flex-1 space-y-6 py-6">
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
                 "w-full flex",
                 msg.sender === "bot" ? "justify-start" : "justify-end"
@@ -176,7 +187,7 @@ export function ChatSimulator() {
                 "py-2 px-1"
               )}>
                 {msg.sender === "bot" && (
-                  <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
+                  <div className="w-12 h-12 rounded-full bg-[#0A0A0A] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
                     <Image
                       src={logoIcon}
                       alt="Emetor"
@@ -188,8 +199,8 @@ export function ChatSimulator() {
                 )}
 
                 <div className={cn(
-                  "text-[16px] md:text-[18px] leading-[1.6] whitespace-pre-wrap",
-                  msg.sender === "bot" ? "text-neutral-800 pt-2" : "text-neutral-700 text-right pt-2"
+                  "text-[16px] md:text-[18px] leading-[1.6] whitespace-pre-wrap pt-2",
+                  msg.sender === "bot" ? "text-neutral-800" : "text-neutral-700 text-right font-medium"
                 )}>
                   {msg.text}
                 </div>
@@ -201,7 +212,7 @@ export function ChatSimulator() {
         {isTyping && (
           <div className="w-full flex justify-start">
             <div className="py-2 px-1 flex gap-4 items-center">
-              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
+              <div className="w-12 h-12 rounded-full bg-[#0A0A0A] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm overflow-hidden p-1.5">
                 <Image
                   src={logoIcon}
                   alt="Emetor"
@@ -225,7 +236,7 @@ export function ChatSimulator() {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center justify-center gap-2 py-4 text-center"
           >
-            <p className="text-sm text-red-600">{submitError}</p>
+            <p className="text-sm font-semibold text-red-600">{submitError}</p>
             <p className="text-xs text-neutral-500">Verifique o e-mail informado e tente enviar novamente.</p>
           </motion.div>
         )}
@@ -236,13 +247,13 @@ export function ChatSimulator() {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center justify-center gap-4 py-8"
           >
-            <div className="flex items-center gap-2 text-primary font-medium">
-              <CheckRead size={20} />
+            <div className="flex items-center gap-2 text-[#b9915e] font-bold text-base">
+              <CheckRead size={22} />
               Diagnóstico enviado com sucesso!
             </div>
             <button
               onClick={handleReset}
-              className="text-xs text-neutral-400 hover:text-neutral-600 flex items-center gap-1 transition-colors"
+              className="text-xs text-neutral-400 hover:text-neutral-700 font-semibold flex items-center gap-1.5 transition-colors px-4 py-2 rounded-full border border-neutral-200 bg-white shadow-sm hover:shadow"
             >
               <Restart size={14} />
               Iniciar novo diagnóstico
@@ -250,40 +261,68 @@ export function ChatSimulator() {
           </motion.div>
         )}
 
-        <div ref={messagesEndRef} className="h-40" />
+        <div ref={messagesEndRef} className="h-44" />
       </div>
 
       {!isFinished && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-10 pb-8 px-4 z-30">
-          <div className="max-w-2xl mx-auto flex flex-col gap-2">
-            {questionIndex > 0 && (
-              <button
-                onClick={handleReset}
-                className="self-center text-[10px] uppercase tracking-widest text-neutral-400 hover:text-neutral-600 flex items-center gap-1 transition-colors mb-2"
+        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white/95 to-transparent pt-10 pb-6 px-4 z-30 pointer-events-auto">
+          <div className="max-w-2xl mx-auto flex flex-col gap-3">
+            {currentSuggestions.length > 0 && !isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-wrap items-center justify-center gap-2 px-1"
               >
-                <Restart size={12} />
-                Reiniciar
-              </button>
+                {currentSuggestions.map((chip, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setInput(chip)}
+                    className="px-3.5 py-1.5 rounded-full border border-neutral-200/90 bg-white/90 backdrop-blur-md text-xs font-semibold text-neutral-600 hover:border-[#b9915e] hover:text-[#b9915e] hover:bg-white transition-all duration-300 shadow-sm hover:shadow"
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </motion.div>
             )}
+
             <form
               onSubmit={handleSend}
-              className="relative bg-white rounded-2xl border border-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.05)] p-1.5 transition-all focus-within:border-primary/30"
+              className="relative w-full bg-white/95 backdrop-blur-xl rounded-[28px] sm:rounded-[32px] border border-neutral-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.09)] transition-all duration-300 focus-within:border-[#b9915e]/50 focus-within:shadow-[0_20px_50px_rgba(185,145,94,0.12)] p-4 flex flex-col gap-2.5"
             >
-              <div className="flex items-center gap-2 pl-3">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  disabled={isTyping}
-                  placeholder="Responda aqui..."
-                  className="flex-1 bg-transparent border-none outline-none text-[16px] text-neutral-900 placeholder:text-neutral-400 py-3"
-                  autoFocus
-                />
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSend()
+                  }
+                }}
+                disabled={isTyping}
+                placeholder="Descreva seu cenário ou selecione uma opção acima..."
+                rows={2}
+                className="w-full bg-transparent border-none outline-none text-[15px] sm:text-[16px] text-neutral-900 placeholder:text-neutral-400/90 resize-none leading-relaxed px-1 pt-0.5"
+              />
+
+              <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
+                <div className="flex items-center gap-2">
+                  {questionIndex > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 flex items-center gap-1 transition-colors px-2 py-1"
+                    >
+                      <Restart size={12} />
+                      Reiniciar
+                    </button>
+                  )}
+                </div>
 
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all hover:bg-primary-hover shadow-sm"
+                  className="w-10 h-10 bg-[#0A0A0A] hover:bg-[#b9915e] rounded-full flex items-center justify-center text-white disabled:opacity-20 disabled:grayscale transition-all duration-300 shadow-md hover:scale-105 shrink-0"
                 >
                   <Plain className="w-5 h-5 -mr-0.5" />
                 </button>
