@@ -69,13 +69,13 @@ const itemVariants = {
 
 export function SolutionSection() {
   return (
-    <section className="w-full bg-white lg:h-[calc(100vh-60px)] lg:h-[calc(100dvh-60px)] flex flex-col justify-center overflow-hidden relative py-6 lg:py-8 border-b border-neutral-100">
+    <section className="w-full bg-white flex flex-col justify-center overflow-hidden relative py-16 sm:py-24 lg:py-32 border-b border-neutral-100">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] opacity-20" />
       </div>
 
-      <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col justify-center h-full max-h-[820px]">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col justify-center h-full">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-6 lg:mb-8">
           <motion.div
