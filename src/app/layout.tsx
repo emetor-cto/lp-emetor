@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Emetor - Performance, eficiência e tecnologia",
   description: "A Emetor estrutura os processos, otimiza o uso das ferramentas e implementa tecnologia de ponta para sua empresa crescer sem atritos.",
+  other: {
+    "facebook-domain-verification": "l372fjj5lrmye57680f46ha581r51k",
+  },
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -36,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        <meta name="facebook-domain-verification" content="l372fjj5lrmye57680f46ha581r51k" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
