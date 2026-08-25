@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Plain, CheckRead, Restart } from "@solar-icons/react"
 import { cn } from "@/utils/utils"
 import { submitDiagnostico } from "@/lib/submit-diagnostico"
+import { isValidEmail } from "@/lib/validate-email"
 
 import logoIcon from "@/assets/logo-icon-darkmode.png"
 
@@ -102,12 +103,35 @@ export function ChatSimulator() {
     if (e) e.preventDefault()
     if (!input.trim() || isTyping || isFinished) return
 
-    const userMsg: Message = { id: Date.now().toString(), text: input, sender: "user" }
-    setMessages(prev => [...prev, userMsg])
-    const currentAnswer = input
-    setInput("")
+    const currentAnswer = input.trim()
 
     if (questionIndex >= botQuestions.length) {
+      if (!isValidEmail(currentAnswer)) {
+        setMessages(prev => [
+          ...prev,
+          { id: Date.now().toString(), text: currentAnswer, sender: "user" }
+        ])
+        setInput("")
+        setIsTyping(true)
+        setSubmitError(null)
+
+        setTimeout(() => {
+          setIsTyping(false)
+          setMessages(prev => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              text: "O e-mail informado parece inválido. Por favor, informe um e-mail de contato válido (exemplo: nome@empresa.com.br).",
+              sender: "bot",
+            }
+          ])
+        }, 800)
+        return
+      }
+
+      const userMsg: Message = { id: Date.now().toString(), text: currentAnswer, sender: "user" }
+      setMessages(prev => [...prev, userMsg])
+      setInput("")
       setIsTyping(true)
       setSubmitError(null)
 
@@ -145,12 +169,23 @@ export function ChatSimulator() {
             ? error.message
             : "Não foi possível enviar o diagnóstico. Tente novamente.",
         )
+        setMessages(prev => [
+          ...prev,
+          {
+            id: (Date.now() + 2).toString(),
+            text: "Por favor, verifique se o e-mail está correto e digite-o novamente para reenviar.",
+            sender: "bot",
+          }
+        ])
       } finally {
         setIsTyping(false)
       }
       return
     }
 
+    const userMsg: Message = { id: Date.now().toString(), text: currentAnswer, sender: "user" }
+    setMessages(prev => [...prev, userMsg])
+    setInput("")
     setIsTyping(true)
 
     setTimeout(() => {

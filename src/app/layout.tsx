@@ -28,6 +28,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { DiagnosticoOverlay } from "@/components/layout/DiagnosticoOverlay";
 import { PageTransition } from "@/components/layout/PageTransition";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
 export default function RootLayout({
   children,
@@ -81,6 +82,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </svg>
         </div>
 
+        <WhatsAppButton />
         <DiagnosticoOverlay />
       </body>
     </html>
