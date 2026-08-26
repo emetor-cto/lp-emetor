@@ -18,7 +18,7 @@ export function WhatsAppButton() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 group flex items-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white pl-4 pr-5 py-3 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_15px_40px_rgba(37,211,102,0.55)] transition-all duration-300 border border-white/20"
+      className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 group flex items-center justify-center sm:gap-3 p-3.5 sm:pl-4 sm:pr-5 sm:py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_15px_40px_rgba(37,211,102,0.55)] transition-all duration-300 border border-white/20"
     >
       <div className="relative flex items-center justify-center shrink-0">
         <svg
@@ -30,7 +30,7 @@ export function WhatsAppButton() {
         </svg>
       </div>
 
-      <span className="text-xs sm:text-[13px] font-extrabold tracking-wide uppercase">
+      <span className="hidden sm:inline text-xs sm:text-[13px] font-extrabold tracking-wide uppercase">
         Falar no WhatsApp
       </span>
     </motion.a>
